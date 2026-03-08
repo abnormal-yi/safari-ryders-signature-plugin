@@ -1,6 +1,6 @@
 # Ryder Signature Itinerary Plugin
 
-This WordPress plugin registers a custom post type `itinerary` and provides a shortcode to render the exact HTML, CSS, and JS provided in your template.
+This WordPress plugin registers a custom post type `safaris` and provides a shortcode to render the exact HTML, CSS, and JS provided in your template.
 
 ## Installation
 

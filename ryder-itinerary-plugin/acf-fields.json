@@ -467,7 +467,7 @@
                 {
                     "param": "post_type",
                     "operator": "==",
-                    "value": "itinerary"
+                    "value": "safaris"
                 }
             ]
         ],
