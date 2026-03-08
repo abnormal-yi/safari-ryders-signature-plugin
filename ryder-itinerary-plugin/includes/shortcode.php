@@ -240,7 +240,7 @@ function ryder_itinerary_shortcode( $atts ) {
             </div>
           </div>
           <div class="hero-cta-row">
-            <a href="#inquire" class="btn-primary">Design Your Journey ›</a>
+            <a href="#" class="btn-primary ryder-trigger-popup">Design Your Journey ›</a>
             <a href="#itinerary" class="btn-ghost">Explore the Route</a>
           </div>
         </header>
@@ -284,7 +284,7 @@ function ryder_itinerary_shortcode( $atts ) {
               <?php endforeach; ?>
             </div>
 
-            <a href="#inquire" class="btn-primary" style="display:inline-flex;margin-top:8px;">Get a Custom Quote ›</a>
+            <a href="#" class="btn-primary ryder-trigger-popup" style="display:inline-flex;margin-top:8px;">Get a Custom Quote ›</a>
           </div>
         </section>
 
@@ -395,7 +395,7 @@ function ryder_itinerary_shortcode( $atts ) {
                   <?php endif; endforeach; ?>
                 </ul>
                 <p class="price-sample"><?php echo esc_html($p['sample']); ?></p>
-                <a href="#inquire" class="btn-primary" style="font-size:10.5px;padding:10px 22px;margin-top:16px;display:inline-flex;">Enquire Now ›</a>
+                <a href="#" class="btn-primary ryder-trigger-popup" style="font-size:10.5px;padding:10px 22px;margin-top:16px;display:inline-flex;">Enquire Now ›</a>
               </div>
               <?php endforeach; ?>
             </div>
@@ -442,7 +442,7 @@ function ryder_itinerary_shortcode( $atts ) {
                   </div>
                   <div class="cta-box">
                     <p>Ready to start planning? Our safari specialists are available seven days a week.</p>
-                    <a href="#inquire">Design Your Journey ›</a>
+                    <a href="#" class="ryder-trigger-popup">Design Your Journey ›</a>
                   </div>
                 </div>
               </div>
@@ -539,10 +539,19 @@ function ryder_itinerary_shortcode( $atts ) {
             <h2 id="cta-heading" class="section-title">Ready to <em>Design Your Journey?</em></h2>
             <p>Your RYDER Signature specialist will build a personalised quote within 24 hours.</p>
             <div class="hero-cta-row">
-              <a href="#inquire" class="btn-primary">Design Your Journey ›</a>
+              <a href="#" class="btn-primary ryder-trigger-popup">Design Your Journey ›</a>
             </div>
           </div>
         </section>
+
+        <!-- POPUP OVERLAY -->
+        <div id="ryder-popup-overlay" class="ryder-popup-overlay">
+          <div class="ryder-popup-content">
+            <button class="ryder-popup-close">&times;</button>
+            <h3 style="font-family:var(--font-display); font-size:1.8rem; margin-bottom:15px; color:var(--dark); text-align:center;">Trip Information</h3>
+            <?php echo do_shortcode('[fluentform id="7"]'); ?>
+          </div>
+        </div>
 
         </main>
     </div>

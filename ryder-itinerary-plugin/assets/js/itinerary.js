@@ -212,5 +212,45 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
+    /* ═══════════ POPUP LOGIC ═══════════ */
+    var popupOverlay = document.getElementById('ryder-popup-overlay');
+    var popupClose = document.querySelector('.ryder-popup-close');
+    var triggerBtns = document.querySelectorAll('.ryder-trigger-popup');
+
+    if (popupOverlay) {
+      // Open popup
+      triggerBtns.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          popupOverlay.classList.add('active');
+          document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+      });
+
+      // Close popup via button
+      if (popupClose) {
+        popupClose.addEventListener('click', function() {
+          popupOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+
+      // Close popup via clicking outside content
+      popupOverlay.addEventListener('click', function(e) {
+        if (e.target === popupOverlay) {
+          popupOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Close popup via Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && popupOverlay.classList.contains('active')) {
+          popupOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
   });
 });
