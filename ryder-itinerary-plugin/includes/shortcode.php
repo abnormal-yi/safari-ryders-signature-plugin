@@ -29,6 +29,36 @@ function ryder_itinerary_shortcode( $atts ) {
         return $fallback;
     };
 
+    // Auto-Coordinates Resolver Function
+    $resolve_coords = function($place_name) {
+        $name = strtolower(trim($place_name));
+        $dict = array(
+            'arusha' => array('lat' => -3.3869, 'lng' => 36.6830),
+            'tarangire' => array('lat' => -4.1629, 'lng' => 36.0899),
+            'ngorongoro' => array('lat' => -3.1618, 'lng' => 35.5877),
+            'serengeti' => array('lat' => -2.3333, 'lng' => 34.8333),
+            'manyara' => array('lat' => -3.5053, 'lng' => 35.8280),
+            'kilimanjaro' => array('lat' => -3.0674, 'lng' => 37.3556),
+            'karatu' => array('lat' => -3.3387, 'lng' => 35.6741),
+            'ndutu' => array('lat' => -3.0200, 'lng' => 34.9960),
+            'zanzibar' => array('lat' => -6.1659, 'lng' => 39.2026),
+            'dar es salaam' => array('lat' => -6.7924, 'lng' => 39.2083),
+            'ruaha' => array('lat' => -7.6366, 'lng' => 34.8888),
+            'selous' => array('lat' => -9.0000, 'lng' => 37.4000),
+            'mikumi' => array('lat' => -7.2340, 'lng' => 37.1381),
+            'nairobi' => array('lat' => -1.2921, 'lng' => 36.8219),
+            'masai mara' => array('lat' => -1.4900, 'lng' => 35.1439),
+            'amboseli' => array('lat' => -2.6527, 'lng' => 37.2606),
+        );
+        foreach($dict as $key => $coords) {
+            if (strpos($name, $key) !== false) {
+                return $coords;
+            }
+        }
+        // Fallback to center of Tanzania if not found
+        return array('lat' => -6.3690, 'lng' => 34.8888);
+    };
+
     // Fetch fields
     $hero_badge = $get_field('ryder_hero_badge', 'NT-C1 · Flagship Program');
     $hero_title = $get_field('ryder_hero_title', '5-Day Tanzania Northern Circuit Safari:');
@@ -47,11 +77,8 @@ function ryder_itinerary_shortcode( $atts ) {
     $overview_label = $get_field('ryder_overview_label', 'Overview');
     $overview_title = $get_field('ryder_overview_title', 'Tanzania\'s <em>Iconic Three</em> — In One Classic Safari');
     $overview_lead = $get_field('ryder_overview_lead', 'The 5-day Tanzania northern circuit safari is the essential introduction to East Africa\'s greatest wildlife stage. Moreover, it is RYDER Signature\'s most-loved flagship itinerary — refined across hundreds of departures to balance pacing, depth, and pure wildlife impact.');
+    $overview_image = $get_field('ryder_overview_image', ''); // New Image Field
     $overview_content = $get_field('ryder_overview_content', '
-        <div class="img-placeholder">
-          📷 Hero image: Wide-angle Serengeti sunrise with safari vehicle silhouette<br>
-          <strong>Alt text:</strong> "Luxury RYDER Signature safari vehicle crossing the Serengeti plains at sunrise during a 5-day Tanzania northern circuit safari"
-        </div>
         <p style="font-size:14.5px;color:var(--text-body);line-height:1.78;max-width:860px;margin-bottom:16px;">
           You arrive at Kilimanjaro International Airport, where your dedicated RYDER Signature guide meets you at arrivals. From that moment forward, Tanzania reveals itself at exactly the right pace. First, the baobab forests of Tarangire National Park introduce you to elephant herds that number in the hundreds. Subsequently, the Ngorongoro Conservation Area draws you toward its famous crater — a collapsed volcano that shelters one of Africa\'s densest concentrations of wildlife within a single bowl of land. Finally, the Serengeti opens before you: two million acres of golden grassland, acacia shade, and predators that move through it all with breathtaking ease.
         </p>
@@ -121,14 +148,16 @@ function ryder_itinerary_shortcode( $atts ) {
     // Format Map Data
     $formatted_stops = array();
     foreach($stops as $stop) {
+        $coords = $resolve_coords($stop['name']);
+        $radius = ($stop['type'] === 'park') ? 40000 : 0;
         $formatted_stops[] = array(
-            'id' => $stop['id'],
+            'id' => sanitize_title($stop['name']),
             'type' => $stop['type'],
             'day' => $stop['day'],
             'name' => $stop['name'],
-            'lat' => (float)$stop['lat'],
-            'lng' => (float)$stop['lng'],
-            'r' => (int)$stop['r']
+            'lat' => (float)$coords['lat'],
+            'lng' => (float)$coords['lng'],
+            'r' => (int)$radius
         );
     }
     $route = array();
@@ -141,10 +170,23 @@ function ryder_itinerary_shortcode( $atts ) {
 
     $day_views = array();
     foreach($days as $d) {
+        $stop_id = sanitize_title($d['map_stop_id']);
+        $focus_lat = -3.1;
+        $focus_lng = 35.4;
+        
+        // Find coordinates from formatted stops
+        foreach($formatted_stops as $fs) {
+            if ($fs['id'] === $stop_id) {
+                $focus_lat = $fs['lat'];
+                $focus_lng = $fs['lng'];
+                break;
+            }
+        }
+
         $day_views[$d['day_num']] = array(
-            'c' => array((float)$d['map_lat'], (float)$d['map_lng']),
-            'z' => (int)$d['map_zoom'],
-            'id' => $d['map_stop_id']
+            'c' => array((float)$focus_lat, (float)$focus_lng),
+            'z' => (int)($d['map_zoom'] ? $d['map_zoom'] : 8),
+            'id' => $stop_id
         );
     }
 
@@ -206,6 +248,10 @@ function ryder_itinerary_shortcode( $atts ) {
             <p class="section-label"><?php echo esc_html($overview_label); ?></p>
             <h2 id="overview-heading" class="section-title"><?php echo wp_kses_post($overview_title); ?></h2>
             <p class="section-lead"><?php echo esc_html($overview_lead); ?></p>
+
+            <?php if ($overview_image): ?>
+            <img src="<?php echo esc_url($overview_image); ?>" alt="<?php echo esc_attr(strip_tags($overview_title)); ?>" style="width:100%; height:auto; border-radius:12px; margin-bottom:32px; box-shadow:0 8px 30px rgba(0,0,0,0.1);">
+            <?php endif; ?>
 
             <?php echo wp_kses_post($overview_content); ?>
 

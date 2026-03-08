@@ -130,6 +130,14 @@
                 "default_value": "The 5-day Tanzania northern circuit safari is the essential introduction to East Africa's greatest wildlife stage. Moreover, it is RYDER Signature's most-loved flagship itinerary — refined across hundreds of departures to balance pacing, depth, and pure wildlife impact."
             },
             {
+                "key": "field_overview_image",
+                "label": "Overview Image (Hero Image)",
+                "name": "ryder_overview_image",
+                "type": "image",
+                "return_format": "url",
+                "preview_size": "medium"
+            },
+            {
                 "key": "field_overview_content",
                 "label": "Overview Content",
                 "name": "ryder_overview_content",
@@ -223,17 +231,12 @@
             },
             {
                 "key": "field_map_stops",
-                "label": "Map Stops (Coordinates)",
+                "label": "Map Stops (Auto-Coordinates)",
                 "name": "ryder_map_stops",
                 "type": "repeater",
+                "instructions": "Just enter the name of the place (e.g. 'Serengeti', 'Arusha'). The plugin will automatically find the coordinates and draw the route!",
                 "layout": "table",
                 "sub_fields": [
-                    {
-                        "key": "field_ms_id",
-                        "label": "ID (e.g. arusha)",
-                        "name": "id",
-                        "type": "text"
-                    },
                     {
                         "key": "field_ms_type",
                         "label": "Type",
@@ -252,27 +255,9 @@
                     },
                     {
                         "key": "field_ms_name",
-                        "label": "Name",
+                        "label": "Place Name (e.g. Serengeti)",
                         "name": "name",
                         "type": "text"
-                    },
-                    {
-                        "key": "field_ms_lat",
-                        "label": "Latitude",
-                        "name": "lat",
-                        "type": "number"
-                    },
-                    {
-                        "key": "field_ms_lng",
-                        "label": "Longitude",
-                        "name": "lng",
-                        "type": "number"
-                    },
-                    {
-                        "key": "field_ms_r",
-                        "label": "Radius (0 for city, 50000 for park)",
-                        "name": "r",
-                        "type": "number"
                     }
                 ]
             },
@@ -374,29 +359,18 @@
                         "type": "textarea"
                     },
                     {
-                        "key": "field_d_map_lat",
-                        "label": "Map Focus Latitude",
-                        "name": "map_lat",
-                        "type": "number"
-                    },
-                    {
-                        "key": "field_d_map_lng",
-                        "label": "Map Focus Longitude",
-                        "name": "map_lng",
-                        "type": "number"
+                        "key": "field_d_map_stop_id",
+                        "label": "Map Focus Place Name (e.g. Serengeti)",
+                        "name": "map_stop_id",
+                        "instructions": "Type the name of the place to zoom into on the mini-map when this day is clicked.",
+                        "type": "text"
                     },
                     {
                         "key": "field_d_map_zoom",
-                        "label": "Map Focus Zoom",
+                        "label": "Map Zoom Level",
                         "name": "map_zoom",
                         "type": "number",
                         "default_value": 8
-                    },
-                    {
-                        "key": "field_d_map_stop_id",
-                        "label": "Map Stop ID (to open popup)",
-                        "name": "map_stop_id",
-                        "type": "text"
                     }
                 ]
             },
