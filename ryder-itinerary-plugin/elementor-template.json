@@ -1,0 +1,33 @@
+{
+    "version": "0.4",
+    "title": "Ryder Itinerary Single Template",
+    "type": "single",
+    "content": [
+        {
+            "id": "ryder_itinerary_section",
+            "elType": "section",
+            "settings": {
+                "content_width": "full"
+            },
+            "elements": [
+                {
+                    "id": "ryder_itinerary_column",
+                    "elType": "column",
+                    "settings": {
+                        "_column_size": 100
+                    },
+                    "elements": [
+                        {
+                            "id": "ryder_itinerary_shortcode",
+                            "elType": "widget",
+                            "settings": {
+                                "shortcode": "[ryder_itinerary]"
+                            },
+                            "widgetType": "shortcode"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

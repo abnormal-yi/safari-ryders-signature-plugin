@@ -10,10 +10,13 @@ function ryder_itinerary_shortcode( $atts ) {
 
     $post_id = $atts['id'];
 
-    if ( get_post_type( $post_id ) !== 'itinerary' && !is_admin() ) {
-        // Allow rendering if we are in admin (like Elementor editor) or if it's the right post type
-        // Actually, just proceed.
-    }
+    // Enqueue assets specifically when shortcode is used
+    wp_enqueue_style( 'google-fonts-cormorant', 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap', array(), null );
+    wp_enqueue_style( 'leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
+    wp_enqueue_style( 'ryder-itinerary-style', RYDER_ITINERARY_PLUGIN_URL . 'assets/css/itinerary.css', array(), '1.0.0' );
+    
+    wp_enqueue_script( 'leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
+    wp_enqueue_script( 'ryder-itinerary-script', RYDER_ITINERARY_PLUGIN_URL . 'assets/js/itinerary.js', array('leaflet-js'), '1.0.0', true );
 
     // Helper to get field with fallback
     $get_field = function($field_name, $fallback) use ($post_id) {
@@ -84,9 +87,20 @@ function ryder_itinerary_shortcode( $atts ) {
         array('tier'=>'High-End Luxury · HEL', 'name'=>'Pinnacle', 'price'=>'$9,800', 'features'=>"Legendary Lodge, Arusha (arrival night)\nLemala Mpingo Ridge, Tarangire\nCrater's Edge, Ngorongoro\nFour Seasons Safari Lodge, Serengeti\nAll park fees, meals & transfers\nExclusive concession access\nPersonalised butler & VIP arrangements", 'sample'=>'The finest addresses in each park — ultra-exclusive, architecturally stunning, and impeccably staffed.', 'is_featured'=>false)
     ));
 
+    $stops = $get_field('ryder_map_stops', array(
+        array('id'=>'arusha', 'type'=>'city', 'day'=>'', 'name'=>'Arusha', 'lat'=>-3.3869, 'lng'=>36.6830, 'r'=>0),
+        array('id'=>'tarangire', 'type'=>'park', 'day'=>'Day 2', 'name'=>'Tarangire N.P.', 'lat'=>-4.1629, 'lng'=>36.0899, 'r'=>50000),
+        array('id'=>'ngorongoro', 'type'=>'park', 'day'=>'Days 3–4', 'name'=>'Ngorongoro Conservation', 'lat'=>-3.1618, 'lng'=>35.5877, 'r'=>27000),
+        array('id'=>'serengeti', 'type'=>'park', 'day'=>'Days 4–5', 'name'=>'Serengeti N.P.', 'lat'=>-2.3333, 'lng'=>34.8333, 'r'=>92000)
+    ));
+
     $days = $get_field('ryder_days', array(
-        array('day_num'=>'1', 'day_type'=>'Day 1 — Arrival', 'title'=>'Arrive Kilimanjaro → Welcome to Arusha', 'body'=>'<p>Your 5-day Tanzania northern circuit safari begins the moment your flight touches down at Kilimanjaro International Airport (JRO). Your dedicated RYDER Signature guide meets you at arrivals with a personalised welcome sign, then transfers you directly to your hotel in Arusha — typically a 60-minute journey through the foothills of Mount Meru.</p><p>Today is intentionally light. After a long international flight, rest is your most important activity. Settle into your accommodation, refresh, and enjoy your first East African dinner. In the evening, your guide conducts a detailed safari briefing, covering the route ahead, wildlife expectations, and what to pack in your daypack for tomorrow\'s game drive.</p><p>No game drives are scheduled on arrival day. This policy reflects RYDER Signature\'s commitment to guest wellbeing — tired travellers miss the details that make a game drive extraordinary. Furthermore, starting rested sets the tone for an alert, immersive experience throughout the safari.</p>', 'tags'=>"Arusha\nArrival Day\nSafari Briefing"),
-        // Additional days omitted for brevity in default fallback, but would be populated via ACF
+        array('day_num'=>'1', 'day_type'=>'Day 1 — Arrival', 'title'=>'Arrive Kilimanjaro → Welcome to Arusha', 'body'=>'<p>Your 5-day Tanzania northern circuit safari begins the moment your flight touches down at Kilimanjaro International Airport (JRO). Your dedicated RYDER Signature guide meets you at arrivals with a personalised welcome sign, then transfers you directly to your hotel in Arusha — typically a 60-minute journey through the foothills of Mount Meru.</p><p>Today is intentionally light. After a long international flight, rest is your most important activity. Settle into your accommodation, refresh, and enjoy your first East African dinner. In the evening, your guide conducts a detailed safari briefing, covering the route ahead, wildlife expectations, and what to pack in your daypack for tomorrow\'s game drive.</p><p>No game drives are scheduled on arrival day. This policy reflects RYDER Signature\'s commitment to guest wellbeing — tired travellers miss the details that make a game drive extraordinary. Furthermore, starting rested sets the tone for an alert, immersive experience throughout the safari.</p>', 'tags'=>"Arusha\nArrival Day\nSafari Briefing", 'map_lat'=>-3.3869, 'map_lng'=>36.6830, 'map_zoom'=>8, 'map_stop_id'=>'arusha'),
+        array('day_num'=>'2', 'day_type'=>'Day 2 — First Game Drive', 'title'=>'Arusha → Tarangire National Park', 'body'=>'<p>After breakfast, your Land Cruiser heads south-west from Arusha on a 2.5-hour drive to Tarangire National Park. As you descend from the highlands onto the Masai Steppe, the landscape shifts dramatically — acacia scrub gives way to ancient baobab trees that seem to erupt from the dry earth like sculptures carved by wind and time.</p><p>Tarangire is one of Tanzania\'s most underrated parks and a personal favourite of many experienced guides. During the dry season, the Tarangire River acts as a magnet for extraordinary wildlife concentrations. Elephant herds arrive in the hundreds — sometimes thousands — to drink and graze along the riverbanks. Additionally, the park holds large populations of buffalo, zebra, wildebeest, and a remarkable diversity of birds exceeding 550 recorded species.</p><p>Your afternoon game drive explores the riverine forest and open floodplains. Lions rest under shade in the afternoon heat, while hippos wallow in the remaining pools. At sunset, your guide selects a quiet viewpoint to pause, absorb the landscape, and pour sundowners before the short drive to your lodge.</p>', 'tags'=>"Tarangire N.P.\nElephant Herds\nBaobab Forest\nAfternoon Drive", 'map_lat'=>-4.1629, 'map_lng'=>36.0899, 'map_zoom'=>9, 'map_stop_id'=>'tarangire'),
+        array('day_num'=>'3', 'day_type'=>'Day 3 — Transfer Day', 'title'=>'Tarangire → Ngorongoro Conservation Area', 'body'=>'<p>You depart Tarangire after an early morning game drive that frequently yields encounters the midday heat would otherwise deny you — lion cubs playing near a kill, leopards descending from fever trees, and the eerie beauty of a jackal hunting alone across the floodplain.</p><p>The drive north-east to the Ngorongoro Conservation Area takes approximately 1.5 hours, passing through the Karatu highlands and the lush coffee and banana farms that drape the slopes beneath the crater rim. As you climb above 2,300 metres, the air cools and the dense montane forest closes in around the road. This transition from Tarangire\'s drylands to Ngorongoro\'s cool altitude represents one of the most dramatic landscape shifts in all of East Africa.</p><p>You arrive at the crater rim in the late afternoon. The view into the caldera — a 600-metre drop to a 260-square-kilometre floor — is staggering on first sight and does not diminish with familiarity. Consequently, most guests simply stand at the viewpoint in silence. Dinner at your rim lodge comes with the kind of stillness that only high-altitude bush can provide.</p>', 'tags'=>"Ngorongoro\nCrater Rim\nMorning Drive\nScenic Transfer", 'map_lat'=>-3.1618, 'map_lng'=>35.5877, 'map_zoom'=>9, 'map_stop_id'=>'ngorongoro'),
+        array('day_num'=>'4', 'day_type'=>'Day 4 — Grand Descent', 'title'=>'Ngorongoro Crater Descent → Central Serengeti', 'body'=>'<p>Today ranks among the most extraordinary days in East African safari travel. You descend into the Ngorongoro Crater at dawn, winding down the steep switchback road as mist cloaks the rim above and the crater floor emerges below. Inside, the world is condensed: predators, prey, and scavengers all compete for territory within this natural amphitheatre, and the density of wildlife per square kilometre is arguably unmatched anywhere on the continent.</p><p>The crater holds all five Big Five species. Black rhino move through the grasslands in the early hours. Lions — prides of up to 30 animals — are resident year-round. Additionally, enormous elephant bulls visit from the slopes, and cheetah have been sighted crossing the open floor in breathtaking long-stride pursuits. You spend the full morning exploring different zones before ascending via the exit road.</p><p>Following a picnic lunch on the crater rim, you continue west on the three-hour drive to the Central Serengeti — arriving in time for an afternoon game drive that introduces you to the endless plains. Even that first glimpse of the Serengeti, before you have had time to settle or strategise, tends to produce sightings that guests remember for decades.</p>', 'tags'=>"Ngorongoro Crater\nSerengeti N.P.\nBig Five\nFull Crater Day", 'map_lat'=>-3.0, 'map_lng'=>35.2, 'map_zoom'=>7, 'map_stop_id'=>'ngorongoro'),
+        array('day_num'=>'5', 'day_type'=>'Day 5 — Full Serengeti Day', 'title'=>'Full Day in the Heart of the Serengeti', 'body'=>'<p>Your full day in the Central Serengeti is the emotional centrepiece of this safari. The wake-up call comes before dawn. You depart into the cool, blue-dark morning as the first light begins to separate the horizon from the sky. This window — roughly 20 minutes of transition from night to day — is when the Serengeti makes its most dramatic moves.</p><p>The Central Serengeti, or Seronera zone, holds the highest year-round concentration of predators in the ecosystem. Resident lion prides dominate drainage lines and granite kopje outcrops. Cheetah mothers teach cubs to hunt on the open plains. Leopards rest with kills wedged into the fork of sausage trees along the Seronera River. Moreover, the resident wildebeest and zebra population ensures that predator activity remains high regardless of the Great Migration\'s seasonal position.</p><p>The afternoon drive takes a different route, perhaps further west towards the plains or north to explore the rolling hills above Seronera. After sunset returns you to camp, dinner under a sky dense with stars provides a natural conclusion to what is, for most guests, the most vivid wildlife day of their lives. Your guide briefs you on tomorrow\'s departure logistics.</p>', 'tags'=>"Serengeti N.P.\nPredators\nDawn Drive\nFull Day", 'map_lat'=>-2.3333, 'map_lng'=>34.8333, 'map_zoom'=>8, 'map_stop_id'=>'serengeti'),
+        array('day_num'=>'6', 'day_type'=>'Day 6 — Departure', 'title'=>'Serengeti → Kilimanjaro — Farewell to the Wild', 'body'=>'<p>Departures from the Serengeti are bittersweet. Nevertheless, a final morning game drive ensures the safari ends on an active note — not simply a drive to an airstrip. Depending on your flight timing, your guide plans a route back toward Ngorongoro and Arusha that incorporates one more game drive corridor before transitioning to tarmac.</p><p>For guests with late evening international flights departing after 18:00, a direct transfer to Kilimanjaro International Airport is perfectly feasible. For earlier flights, RYDER Signature recommends an overnight stay near the airport in Arusha, eliminating the stress of a rushed final transfer. Either way, your guide remains with you until the airport drop-off is complete.</p><p>As you board your flight home, Tanzania recedes below — the Rift Valley, the crater, the Serengeti horizon — and the photographs, the silence, the exact weight of a lion\'s gaze across a distance of ten metres, travel with you. Therefore, many guests find themselves planning their return before they have even landed.</p>', 'tags'=>"Departure Day\nMorning Drive\nAirport Transfer", 'map_lat'=>-3.1, 'map_lng'=>35.5, 'map_zoom'=>7, 'map_stop_id'=>'arusha'),
     ));
 
     $inclusions = $get_field('ryder_inclusions', "Airport meet and greet upon arrival at Kilimanjaro International Airport\nAll airport transfers as per itinerary (one pick-up, one drop-off)\nProfessional English-speaking safari guide and driver throughout\nPrivate 4x4 Toyota Land Cruiser with pop-up roof hatch and guaranteed window seats\nAll national park entry fees and Ngorongoro Conservation Area fees\nGame drives as specified in the itinerary (morning and afternoon)\nAccommodation as specified per tier (or equivalent standard if unavailable)\nAll meals as indicated — Breakfast, Lunch, and Dinner throughout\nBottled mineral water during all game drives\nFlying Doctors emergency evacuation coverage for the duration of the safari\n24/7 RYDER Signature safari support hotline access");
@@ -99,12 +113,47 @@ function ryder_itinerary_shortcode( $atts ) {
     ));
 
     $faqs = $get_field('ryder_faqs', array(
-        array('question'=>'What is included in the 5-day Tanzania northern circuit safari?', 'answer'=>'The safari includes airport transfers, five nights of accommodation, all meals as indicated, game drives with a professional guide, national park and conservation fees, bottled water on game drives, and Flying Doctors emergency evacuation coverage. Essentially, all logistics are handled — you simply arrive and experience.')
+        array('question'=>'What is included in the 5-day Tanzania northern circuit safari?', 'answer'=>'The safari includes airport transfers, five nights of accommodation, all meals as indicated, game drives with a professional guide, national park and conservation fees, bottled water on game drives, and Flying Doctors emergency evacuation coverage. Essentially, all logistics are handled — you simply arrive and experience.'),
+        array('question'=>'When is the best time to do the northern circuit safari in Tanzania?', 'answer'=>'The northern circuit is genuinely rewarding year-round. However, the dry season from June to October offers the best game viewing — animals concentrate around water sources and vegetation thins for clearer sightlines. January to March is superb for calving season near Ndutu, with dense predator activity. Moreover, the green season from November to May delivers lush landscapes, excellent bird life, and significantly fewer visitors at parks and lodges.'),
+        array('question'=>'Is the 5-day northern circuit safari suitable for first-time visitors?', 'answer'=>'Absolutely. This itinerary is RYDER Signature\'s flagship classic program, designed specifically for first-time safari visitors who want to experience Tanzania\'s three most iconic destinations in a well-paced journey. The driving distances are manageable, the wildlife is abundant, and the variety — from Tarangire\'s elephants to the Serengeti\'s predators — ensures there is something profound at every stage.')
     ));
+
+    // Format Map Data
+    $formatted_stops = array();
+    foreach($stops as $stop) {
+        $formatted_stops[] = array(
+            'id' => $stop['id'],
+            'type' => $stop['type'],
+            'day' => $stop['day'],
+            'name' => $stop['name'],
+            'lat' => (float)$stop['lat'],
+            'lng' => (float)$stop['lng'],
+            'r' => (int)$stop['r']
+        );
+    }
+    $route = array();
+    foreach($formatted_stops as $stop) {
+        $route[] = array($stop['lat'], $stop['lng']);
+    }
+    if(count($route) > 0) {
+        $route[] = $route[0]; // Return to start
+    }
+
+    $day_views = array();
+    foreach($days as $d) {
+        $day_views[$d['day_num']] = array(
+            'c' => array((float)$d['map_lat'], (float)$d['map_lng']),
+            'z' => (int)$d['map_zoom'],
+            'id' => $d['map_stop_id']
+        );
+    }
 
     ob_start();
     ?>
-    <div class="ryder-itinerary-wrapper">
+    <div class="ryder-itinerary-wrapper" id="ryder-itinerary-<?php echo esc_attr($post_id); ?>"
+         data-stops="<?php echo htmlspecialchars(json_encode($formatted_stops), ENT_QUOTES, 'UTF-8'); ?>"
+         data-route="<?php echo htmlspecialchars(json_encode($route), ENT_QUOTES, 'UTF-8'); ?>"
+         data-dayviews="<?php echo htmlspecialchars(json_encode($day_views), ENT_QUOTES, 'UTF-8'); ?>">
         <!-- HERO -->
         <header class="hero" role="banner">
           <div class="hero-badge"><?php echo esc_html($hero_badge); ?></div>
@@ -242,7 +291,7 @@ function ryder_itinerary_shortcode( $atts ) {
                   <span class="park-tag">Ngorongoro Crater</span>
                   <span class="park-tag">Serengeti N.P.</span>
                 </div>
-                <button class="btn-replay" onclick="runAnimation()">&#9654; Replay Route</button>
+                <button class="btn-replay">&#9654; Replay Route</button>
               </div>
             </div>
           </div>
@@ -294,7 +343,7 @@ function ryder_itinerary_shortcode( $atts ) {
                   $first = false;
                   $tags_arr = explode("\n", $d['tags']);
                 ?>
-                <div class="day-card <?php echo $active_class; ?>" data-day="<?php echo esc_attr($d['day_num']); ?>" onclick="selectDay(<?php echo esc_attr($d['day_num']); ?>)">
+                <div class="day-card <?php echo $active_class; ?>" data-day="<?php echo esc_attr($d['day_num']); ?>">
                   <div class="day-number"><span>Day</span><strong><?php echo esc_html($d['day_num']); ?></strong></div>
                   <p class="day-type"><?php echo esc_html($d['day_type']); ?></p>
                   <h3 class="day-title"><?php echo esc_html($d['title']); ?></h3>
@@ -398,7 +447,7 @@ function ryder_itinerary_shortcode( $atts ) {
                 $first = false;
               ?>
               <div class="faq-item <?php echo $open_class; ?>" role="listitem">
-                <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="true">
+                <button class="faq-q" aria-expanded="true">
                   <?php echo esc_html($f['question']); ?>
                   <span class="faq-icon">+</span>
                 </button>
