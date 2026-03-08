@@ -147,25 +147,30 @@ function ryder_itinerary_shortcode( $atts ) {
 
     // Format Map Data
     $formatted_stops = array();
-    foreach($stops as $stop) {
-        $coords = $resolve_coords($stop['name']);
-        $radius = ($stop['type'] === 'park') ? 40000 : 0;
-        $formatted_stops[] = array(
-            'id' => sanitize_title($stop['name']),
-            'type' => $stop['type'],
-            'day' => $stop['day'],
-            'name' => $stop['name'],
-            'lat' => (float)$coords['lat'],
-            'lng' => (float)$coords['lng'],
-            'r' => (int)$radius
-        );
+    if (is_array($stops)) {
+        foreach($stops as $stop) {
+            if (empty($stop['name'])) continue; // Skip empty rows
+            
+            $coords = $resolve_coords($stop['name']);
+            $radius = ($stop['type'] === 'park') ? 40000 : 0;
+            $formatted_stops[] = array(
+                'id' => sanitize_title($stop['name']),
+                'type' => $stop['type'],
+                'day' => $stop['day'],
+                'name' => $stop['name'],
+                'lat' => (float)$coords['lat'],
+                'lng' => (float)$coords['lng'],
+                'r' => (int)$radius
+            );
+        }
     }
+    
     $route = array();
     foreach($formatted_stops as $stop) {
         $route[] = array($stop['lat'], $stop['lng']);
     }
-    if(count($route) > 0) {
-        $route[] = $route[0]; // Return to start
+    if(count($route) > 1) {
+        $route[] = $route[0]; // Return to start only if there's more than 1 point
     }
 
     $day_views = array();
@@ -333,9 +338,18 @@ function ryder_itinerary_shortcode( $atts ) {
               <div class="map-footer">
                 <span class="map-footer-label">Parks Visited</span>
                 <div class="park-tags">
-                  <span class="park-tag">Tarangire N.P.</span>
-                  <span class="park-tag">Ngorongoro Crater</span>
-                  <span class="park-tag">Serengeti N.P.</span>
+                  <?php 
+                  $park_names = array();
+                  foreach($formatted_stops as $fs) {
+                      if($fs['type'] === 'park' && !in_array($fs['name'], $park_names)) {
+                          $park_names[] = $fs['name'];
+                          echo '<span class="park-tag">' . esc_html($fs['name']) . '</span>';
+                      }
+                  }
+                  if(empty($park_names)) {
+                      echo '<span class="park-tag" style="background:transparent;border:none;color:var(--muted);">No parks selected yet</span>';
+                  }
+                  ?>
                 </div>
                 <button class="btn-replay">&#9654; Replay Route</button>
               </div>

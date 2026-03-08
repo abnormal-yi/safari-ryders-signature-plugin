@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function runAnimation() {
       clearAnim();
 
+      if (!stops || stops.length === 0) return;
+
       /* Pin markers with staggered pop-in */
       stops.forEach(function(s, i) {
         var isPark = s.type === 'park';
@@ -102,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
         className:'', iconSize:[14,14], iconAnchor:[7,7]
       });
       
-      if (fullRoute.length > 0) {
+      if (fullRoute.length > 1) {
         var dot = L.marker(fullRoute[0], { icon:dotIcon, zIndexOffset:1000 }).addTo(map);
         dotMarker = dot;
 
