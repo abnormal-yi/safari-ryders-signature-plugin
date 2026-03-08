@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var fullRoute = JSON.parse(wrapper.getAttribute('data-route') || '[]');
     var dayViews = JSON.parse(wrapper.getAttribute('data-dayviews') || '{}');
 
-    var mapEl = wrapper.querySelector('#s-map');
+    var mapEl = wrapper.querySelector('.ryder-map-container');
     if (!mapEl) return;
 
     // Ensure unique IDs for maps if there are multiple shortcodes on a page
     var uniqueId = Math.random().toString(36).substr(2, 9);
     mapEl.id = 's-map-' + uniqueId;
     
-    var miniMapEl = wrapper.querySelector('#mini-map');
+    var miniMapEl = wrapper.querySelector('.ryder-minimap-container');
     if (miniMapEl) {
       miniMapEl.id = 'mini-map-' + uniqueId;
     }
@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     /* ═══════════ MAIN MAP ═══════════ */
     var map = L.map(mapEl.id, { center: [-3.1, 35.4], zoom: 6, zoomControl: true, scrollWheelZoom: false });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { subdomains:'abcd', maxZoom:19 }).addTo(map);
+
+    // Force map to recalculate its size after a short delay (fixes rendering issues in some themes)
+    setTimeout(function() {
+      map.invalidateSize();
+    }, 500);
 
     /* Park shading — always visible */
     stops.filter(function(s){ return s.r > 0; }).forEach(function(s) {
@@ -153,6 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (miniMapEl) {
       miniMap = L.map(miniMapEl.id, { center:[-3.1, 35.4], zoom:5, zoomControl:false, scrollWheelZoom:false, attributionControl:false });
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { subdomains:'abcd', maxZoom:19 }).addTo(miniMap);
+      
+      setTimeout(function() {
+        miniMap.invalidateSize();
+      }, 500);
 
       stops.filter(function(s){ return s.r > 0; }).forEach(function(s) {
         L.circle([s.lat, s.lng], {
