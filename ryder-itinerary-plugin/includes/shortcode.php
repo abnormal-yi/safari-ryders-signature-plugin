@@ -152,10 +152,22 @@ function ryder_itinerary_shortcode( $atts ) {
             if (empty($stop['name'])) continue; // Skip empty rows
             
             $coords = $resolve_coords($stop['name']);
-            $radius = ($stop['type'] === 'park') ? 40000 : 0;
+            
+            // Foolproof check: if they typed a park name but selected City, fix it automatically
+            $name_lower = strtolower($stop['name']);
+            $is_known_park = false;
+            $known_parks = array('serengeti', 'tarangire', 'ngorongoro', 'manyara', 'ruaha', 'selous', 'mikumi', 'amboseli', 'masai mara', 'kilimanjaro');
+            foreach($known_parks as $kp) {
+                if (strpos($name_lower, $kp) !== false) {
+                    $is_known_park = true; break;
+                }
+            }
+            $actual_type = ($stop['type'] === 'park' || $is_known_park) ? 'park' : 'city';
+            $radius = ($actual_type === 'park') ? 40000 : 0;
+            
             $formatted_stops[] = array(
                 'id' => sanitize_title($stop['name']),
-                'type' => $stop['type'],
+                'type' => $actual_type,
                 'day' => $stop['day'],
                 'name' => $stop['name'],
                 'lat' => (float)$coords['lat'],
@@ -334,7 +346,7 @@ function ryder_itinerary_shortcode( $atts ) {
             </div>
 
             <div class="map-card" style="margin-top:20px;">
-              <div id="s-map"></div>
+              <div id="s-map" class="ryder-map-container"></div>
               <div class="map-footer">
                 <span class="map-footer-label">Parks Visited</span>
                 <div class="park-tags">
@@ -421,7 +433,7 @@ function ryder_itinerary_shortcode( $atts ) {
 
               <!-- STICKY SIDE PANEL -->
               <div class="sticky-map-panel">
-                <div id="mini-map"></div>
+                <div id="mini-map" class="ryder-minimap-container"></div>
                 <div class="mini-map-footer">
                   <h4>Safari At a Glance</h4>
                   <div class="quick-stats">
