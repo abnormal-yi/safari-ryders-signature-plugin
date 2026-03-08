@@ -477,16 +477,3 @@ function ryder_itinerary_shortcode( $atts ) {
     <?php
     return ob_get_clean();
 }
-
-// Automatically display the shortcode on single itinerary pages
-add_filter( 'the_content', 'ryder_itinerary_auto_display' );
-function ryder_itinerary_auto_display( $content ) {
-    if ( is_singular( 'itinerary' ) && in_the_loop() && is_main_query() ) {
-        // Kama shortcode haijawekwa manually (mfano kupitia Elementor), iweke automatically
-        if ( ! has_shortcode( $content, 'ryder_itinerary' ) ) {
-            $custom_content = do_shortcode( '[ryder_itinerary]' );
-            return $custom_content . $content;
-        }
-    }
-    return $content;
-}
