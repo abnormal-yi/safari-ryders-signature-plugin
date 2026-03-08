@@ -42,6 +42,7 @@ function ryder_register_itinerary_cpt() {
         'publicly_queryable'    => true,
         'capability_type'       => 'page',
         'show_in_rest'          => true,
+        'rewrite'               => array( 'slug' => 'safaris' ),
     );
     register_post_type( 'itinerary', $args );
 }
