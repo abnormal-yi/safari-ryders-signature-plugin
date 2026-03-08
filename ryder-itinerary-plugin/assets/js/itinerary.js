@@ -28,14 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }).addTo(map);
     });
 
+    var minLat = -3.1, maxLat = -3.1, minLng = 35.4, maxLng = 35.4;
     if (stops.length > 0) {
       // Calculate bounds dynamically based on stops
       var lats = stops.map(function(s) { return s.lat; });
       var lngs = stops.map(function(s) { return s.lng; });
-      var minLat = Math.min.apply(null, lats) - 0.5;
-      var maxLat = Math.max.apply(null, lats) + 0.5;
-      var minLng = Math.min.apply(null, lngs) - 0.5;
-      var maxLng = Math.max.apply(null, lngs) + 0.5;
+      minLat = Math.min.apply(null, lats) - 0.5;
+      maxLat = Math.max.apply(null, lats) + 0.5;
+      minLng = Math.min.apply(null, lngs) - 0.5;
+      maxLng = Math.max.apply(null, lngs) + 0.5;
       map.fitBounds([[minLat, minLng], [maxLat, maxLng]], { padding:[48,48] });
     }
 
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
        .setLatLng([s.lat, s.lng]).addTo(map);
     });
 
-    var mmap = {}, animLine = null, dotMarker = null, raf = null, loopTimer = null;
+    var mmap = {}, animMarkers = [], animLine = null, dotMarker = null, raf = null, loopTimer = null;
 
     function lerp(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]; }
     function ease(t){ return t<0.5 ? 2*t*t : 1-2*(1-t)*(1-t); }
@@ -57,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
       if(dotMarker){ try{ map.removeLayer(dotMarker); }catch(e){} dotMarker=null; }
       if(raf){ cancelAnimationFrame(raf); raf=null; }
       if(loopTimer){ clearTimeout(loopTimer); loopTimer=null; }
-      Object.keys(mmap).forEach(function(k){ try{ map.removeLayer(mmap[k]); }catch(e){} });
+      animMarkers.forEach(function(m){ try{ map.removeLayer(m); }catch(e){} });
+      animMarkers = [];
       mmap = {};
     }
 
@@ -86,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
           + '</div></div>',
           { maxWidth:240, closeButton:false }
         );
+        animMarkers.push(m);
         mmap[s.id] = m;
       });
 
@@ -109,6 +112,13 @@ document.addEventListener('DOMContentLoaded', function() {
           if(!startTs) startTs = ts;
           var t = Math.min((ts - startTs)/duration, 1), p = ease(t);
           var sp = p*segs, si = Math.min(Math.floor(sp), segs-1), st = sp - si;
+          
+          // Safety check for empty or invalid route
+          if(si < 0 || !fullRoute[si] || !fullRoute[Math.min(si+1, segs)]) {
+            if(raf) cancelAnimationFrame(raf);
+            return;
+          }
+          
           var cur = lerp(fullRoute[si], fullRoute[Math.min(si+1, segs)], st);
           line.setLatLngs(fullRoute.slice(0, si+1).concat([cur]));
           dot.setLatLng(cur);
@@ -128,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (replayBtn) {
       replayBtn.addEventListener('click', function(e) {
         e.preventDefault();
+        e.stopPropagation();
         runAnimation();
       });
     }
