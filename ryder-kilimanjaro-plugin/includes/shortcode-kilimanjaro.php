@@ -204,6 +204,62 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                       <td>3–4 hrs</td>
                       <td>Rainforest</td>
                     </tr>
+                    <tr>
+                      <td>Day 2</td>
+                      <td>Mti Mkubwa → <strong>Shira 1 Camp</strong></td>
+                      <td>2,895m → 3,610m</td>
+                      <td>8 km</td>
+                      <td>5–7 hrs</td>
+                      <td>Heath / Moorland</td>
+                    </tr>
+                    <tr>
+                      <td>Day 3</td>
+                      <td>Shira 1 → <strong>Shira 2 Camp</strong></td>
+                      <td>3,610m → 3,840m</td>
+                      <td>6 km</td>
+                      <td>4–5 hrs</td>
+                      <td>Moorland</td>
+                    </tr>
+                    <tr>
+                      <td>Day 4</td>
+                      <td>Shira 2 → Lava Tower → <strong>Barranco Camp</strong></td>
+                      <td>3,840m → 4,630m → 3,976m</td>
+                      <td>10 km</td>
+                      <td>6–8 hrs</td>
+                      <td>Alpine Desert</td>
+                    </tr>
+                    <tr>
+                      <td>Day 5</td>
+                      <td>Barranco → <strong>Karanga Camp</strong></td>
+                      <td>3,976m → 3,995m</td>
+                      <td>5 km</td>
+                      <td>4–5 hrs</td>
+                      <td>Alpine Desert</td>
+                    </tr>
+                    <tr>
+                      <td>Day 6</td>
+                      <td>Karanga → <strong>Barafu Camp</strong></td>
+                      <td>3,995m → 4,673m</td>
+                      <td>4 km</td>
+                      <td>4–5 hrs</td>
+                      <td>Alpine Desert</td>
+                    </tr>
+                    <tr class="summit-row">
+                      <td>Day 7</td>
+                      <td>Barafu → <strong>Uhuru Peak</strong> → Mweka Camp</td>
+                      <td>4,673m → 5,895m → 3,100m</td>
+                      <td>17 km</td>
+                      <td>12–16 hrs</td>
+                      <td>Arctic / Descent</td>
+                    </tr>
+                    <tr>
+                      <td>Day 8</td>
+                      <td>Mweka Camp → <strong>Mweka Gate</strong></td>
+                      <td>3,100m → 1,640m</td>
+                      <td>10 km</td>
+                      <td>3–4 hrs</td>
+                      <td>Rainforest</td>
+                    </tr>
                     <?php
                 }
                 ?>
@@ -234,26 +290,64 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                 </div>
                 <!-- STATS BADGE -->
                 <div class="mw-badge">
-                  Elevation Gain: <span>4,449m</span> &nbsp;|&nbsp; Elevation Loss: <span>4,909m</span> &nbsp;|&nbsp; Total Distance: <span>66 km</span>
+                  Elevation Gain: <span><?php echo esc_html( $get_field('ryder_elev_gain', '4,449m') ); ?></span> &nbsp;|&nbsp; Total Distance: <span><?php echo esc_html( $get_field('ryder_distance', '66 km') ); ?></span>
                 </div>
                 <!-- BODY: MAP LEFT + ITINERARY RIGHT -->
                 <div class="mw-body">
                   <div class="mw-left">
                     <!-- MAP -->
                     <div class="mw-mapcard">
-                      <div id="s-map"></div>
+                      <?php
+                      // Fetch map stops from ACF
+                      $map_stops = $get_field('ryder_map_stops', array());
+                      $stops_json = '[]';
+                      if ( !empty($map_stops) && is_array($map_stops) ) {
+                          $formatted_stops = array();
+                          foreach ( $map_stops as $index => $stop ) {
+                              // We need coordinates. For now, we'll assign dummy coordinates based on index
+                              // In a real scenario, you'd need a geocoding API or manual coordinate entry
+                              $lat = -3.0670 + ($index * 0.005);
+                              $lng = 37.0530 + ($index * 0.02);
+                              
+                              // If it's a known place, we could hardcode coordinates here
+                              $name_lower = strtolower($stop['name']);
+                              if (strpos($name_lower, 'lemosho') !== false) { $lat = -3.0670; $lng = 37.0530; }
+                              elseif (strpos($name_lower, 'mti mkubwa') !== false) { $lat = -3.0450; $lng = 37.0850; }
+                              elseif (strpos($name_lower, 'shira 1') !== false) { $lat = -3.0280; $lng = 37.1100; }
+                              elseif (strpos($name_lower, 'shira 2') !== false) { $lat = -3.0100; $lng = 37.1350; }
+                              elseif (strpos($name_lower, 'lava') !== false) { $lat = -3.0500; $lng = 37.2000; }
+                              elseif (strpos($name_lower, 'barranco') !== false) { $lat = -3.0750; $lng = 37.2250; }
+                              elseif (strpos($name_lower, 'karanga') !== false) { $lat = -3.0850; $lng = 37.2600; }
+                              elseif (strpos($name_lower, 'barafu') !== false) { $lat = -3.0650; $lng = 37.2950; }
+                              elseif (strpos($name_lower, 'uhuru') !== false || strpos($name_lower, 'summit') !== false) { $lat = -3.0759; $lng = 37.3537; }
+                              elseif (strpos($name_lower, 'mweka camp') !== false) { $lat = -3.1050; $lng = 37.3200; }
+                              elseif (strpos($name_lower, 'mweka gate') !== false) { $lat = -3.1450; $lng = 37.3100; }
+
+                              $formatted_stops[] = array(
+                                  'id' => 'stop_' . $index,
+                                  'type' => $stop['type'],
+                                  'day' => $stop['day'],
+                                  'name' => $stop['name'],
+                                  'elev' => $stop['elev'],
+                                  'lat' => $lat,
+                                  'lng' => $lng
+                              );
+                          }
+                          $stops_json = json_encode($formatted_stops);
+                      }
+                      ?>
+                      <div id="s-map" data-stops='<?php echo esc_attr($stops_json); ?>'></div>
                       <div class="mw-mf">
-                        <span class="mw-mfl">8-Day Route</span>
+                        <span class="mw-mfl"><?php echo esc_html( $get_field('ryder_duration', '8-Day Route') ); ?></span>
                         <div style="display:flex;gap:7px;flex-wrap:wrap;">
-                          <span class="mw-ftag">Lemosho Gate → Uhuru Peak</span>
                           <span class="mw-ftag">Most Scenic Route</span>
-                          <span class="mw-ftag">90%+ Success Rate</span>
+                          <span class="mw-ftag"><?php echo esc_html( $get_field('ryder_success_rate', '90%+ Success Rate') ); ?></span>
                         </div>
                       </div>
                     </div>
                     <!-- ELEVATION PROFILE -->
                     <div class="mw-elevation">
-                      <div class="mw-elev-title">8-Day Lemosho Route — Elevation Profile</div>
+                      <div class="mw-elev-title"><?php echo esc_html( $get_field('ryder_duration', '8-Day Route') ); ?> — Elevation Profile</div>
                       <div class="mw-graph-container">
                         <svg class="mw-graph-svg" viewBox="0 0 1060 340" preserveAspectRatio="xMidYMid meet">
                           <defs>
@@ -282,12 +376,91 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                               <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0"/>
                             </radialGradient>
                           </defs>
-                          <!-- Zone bands -->
-                          <path d="M 20,300 L 20,257 L 107,209 L 107,300 Z" fill="url(#zoneRainforest2)" opacity="0.75"/>
-                          <path d="M 107,300 L 107,209 L 224,165 L 311,151 L 384,103 L 456,143 L 529,142 L 529,300 Z" fill="url(#zoneMoorland2)" opacity="0.65"/>
-                          <path d="M 529,300 L 529,142 L 587,101 L 587,300 Z" fill="url(#zoneAlpine2)" opacity="0.65"/>
-                          <path d="M 587,300 L 587,101 L 689,26 L 689,300 Z" fill="url(#zoneArctic2)" opacity="0.7"/>
-                          <path d="M 689,300 L 689,26 L 835,197 L 980,285 L 980,300 Z" fill="url(#zoneDescent2)" opacity="0.55"/>
+                          
+                          <?php
+                          // Dynamic Elevation Profile Generation
+                          $total_distance = (float) preg_replace('/[^0-9.]/', '', $get_field('ryder_distance', '66'));
+                          if ($total_distance <= 0) $total_distance = 66;
+                          
+                          $max_elev = 6000;
+                          $min_elev = 1500;
+                          $elev_range = $max_elev - $min_elev;
+                          
+                          $svg_width = 960; // 980 - 20
+                          $svg_height = 280; // 300 - 20
+                          
+                          $points = array();
+                          $current_dist = 0;
+                          
+                          // We use the glance rows to build the profile
+                          $glance_rows = $get_field('ryder_glance', array());
+                          
+                          if (!empty($glance_rows) && is_array($glance_rows)) {
+                              // First point (start)
+                              $first_elev_str = explode('→', $glance_rows[0]['elev'])[0];
+                              $first_elev = (float) preg_replace('/[^0-9.]/', '', $first_elev_str);
+                              
+                              $x = 20;
+                              $y = 300 - (($first_elev - $min_elev) / $elev_range) * $svg_height;
+                              $points[] = array('x' => $x, 'y' => $y, 'elev' => $first_elev, 'dist' => 0, 'day' => 0, 'name' => 'START', 'zone' => 'Rainforest');
+                              
+                              foreach ($glance_rows as $index => $row) {
+                                  $day_num = $index + 1;
+                                  $dist_val = (float) preg_replace('/[^0-9.]/', '', $row['dist']);
+                                  $current_dist += $dist_val;
+                                  
+                                  $elev_parts = explode('→', $row['elev']);
+                                  $end_elev_str = end($elev_parts);
+                                  $end_elev = (float) preg_replace('/[^0-9.]/', '', $end_elev_str);
+                                  
+                                  // If there's a middle elevation (like Lava Tower)
+                                  if (count($elev_parts) > 2) {
+                                      $mid_elev_str = $elev_parts[1];
+                                      $mid_elev = (float) preg_replace('/[^0-9.]/', '', $mid_elev_str);
+                                      
+                                      $mid_x = 20 + (($current_dist - ($dist_val/2)) / $total_distance) * $svg_width;
+                                      $mid_y = 300 - (($mid_elev - $min_elev) / $elev_range) * $svg_height;
+                                      
+                                      $points[] = array('x' => $mid_x, 'y' => $mid_y, 'elev' => $mid_elev, 'dist' => $current_dist - ($dist_val/2), 'day' => $day_num, 'name' => 'HIGH POINT', 'zone' => $row['zone'], 'is_mid' => true);
+                                  }
+                                  
+                                  $x = 20 + ($current_dist / $total_distance) * $svg_width;
+                                  $y = 300 - (($end_elev - $min_elev) / $elev_range) * $svg_height;
+                                  
+                                  $route_parts = explode('→', strip_tags($row['route']));
+                                  $name = trim(end($route_parts));
+                                  
+                                  $is_summit = (stripos($row['route'], 'Uhuru') !== false || stripos($row['route'], 'Summit') !== false);
+                                  
+                                  $points[] = array('x' => $x, 'y' => $y, 'elev' => $end_elev, 'dist' => $current_dist, 'day' => $day_num, 'name' => strtoupper($name), 'zone' => $row['zone'], 'is_summit' => $is_summit);
+                              }
+                          } else {
+                              // Fallback static points if no data
+                              $points = [
+                                  ['x'=>20, 'y'=>257, 'elev'=>2100, 'dist'=>0, 'day'=>0, 'name'=>'LEMOSHO', 'zone'=>'Rainforest'],
+                                  ['x'=>107, 'y'=>209, 'elev'=>2895, 'dist'=>6, 'day'=>1, 'name'=>'MTI MKUBWA', 'zone'=>'Rainforest'],
+                                  ['x'=>224, 'y'=>165, 'elev'=>3610, 'dist'=>14, 'day'=>2, 'name'=>'SHIRA 1', 'zone'=>'Moorland'],
+                                  ['x'=>311, 'y'=>151, 'elev'=>3840, 'dist'=>20, 'day'=>3, 'name'=>'SHIRA 2', 'zone'=>'Moorland'],
+                                  ['x'=>384, 'y'=>103, 'elev'=>4630, 'dist'=>25, 'day'=>4, 'name'=>'LAVA TOWER', 'zone'=>'Alpine', 'is_mid'=>true],
+                                  ['x'=>456, 'y'=>143, 'elev'=>3976, 'dist'=>30, 'day'=>4, 'name'=>'BARRANCO', 'zone'=>'Alpine'],
+                                  ['x'=>529, 'y'=>142, 'elev'=>3995, 'dist'=>35, 'day'=>5, 'name'=>'KARANGA', 'zone'=>'Alpine'],
+                                  ['x'=>587, 'y'=>101, 'elev'=>4673, 'dist'=>39, 'day'=>6, 'name'=>'BARAFU', 'zone'=>'Alpine'],
+                                  ['x'=>689, 'y'=>26, 'elev'=>5895, 'dist'=>46, 'day'=>7, 'name'=>'UHURU PEAK', 'zone'=>'Arctic', 'is_summit'=>true],
+                                  ['x'=>835, 'y'=>197, 'elev'=>3100, 'dist'=>56, 'day'=>7, 'name'=>'MWEKA', 'zone'=>'Descent'],
+                                  ['x'=>980, 'y'=>285, 'elev'=>1640, 'dist'=>66, 'day'=>8, 'name'=>'MWEKA GATE', 'zone'=>'Rainforest']
+                              ];
+                          }
+                          
+                          // Generate path string
+                          $path_d = "M " . $points[0]['x'] . "," . $points[0]['y'];
+                          for ($i = 1; $i < count($points); $i++) {
+                              $path_d .= " L " . $points[$i]['x'] . "," . $points[$i]['y'];
+                          }
+                          
+                          // Generate fill path
+                          $fill_d = $path_d . " L " . end($points)['x'] . ",300 L 20,300 Z";
+                          ?>
+                          
                           <!-- Grid lines -->
                           <line x1="20" y1="264" x2="980" y2="264" stroke="#E8DFC8" stroke-width="1" stroke-dasharray="4 5"/>
                           <line x1="20" y1="203" x2="980" y2="203" stroke="#E8DFC8" stroke-width="1" stroke-dasharray="4 5"/>
@@ -296,205 +469,204 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                           <line x1="20" y1="20"  x2="980" y2="20"  stroke="#E8DFC8" stroke-width="0.6" stroke-dasharray="2 6" opacity="0.5"/>
                           <line x1="20" y1="300" x2="980" y2="300" stroke="#D4B96A" stroke-width="1.5"/>
                           <line x1="20" y1="20"  x2="20"  y2="300" stroke="#D4B96A" stroke-width="1"/>
+                          
                           <!-- Y-axis labels -->
                           <text x="14" y="268" font-size="11" fill="#6B5020" text-anchor="end" font-family="sans-serif" font-weight="600">2,000m</text>
                           <text x="14" y="207" font-size="11" fill="#6B5020" text-anchor="end" font-family="sans-serif" font-weight="600">3,000m</text>
                           <text x="14" y="146" font-size="11" fill="#6B5020" text-anchor="end" font-family="sans-serif" font-weight="600">4,000m</text>
                           <text x="14" y="85"  font-size="11" fill="#6B5020" text-anchor="end" font-family="sans-serif" font-weight="600">5,000m</text>
                           <text x="14" y="24"  font-size="11" fill="#A07828" text-anchor="end" font-family="sans-serif" font-weight="700">6,000m</text>
-                          <!-- Zone labels -->
-                          <text x="64"  y="293" font-size="8.5" fill="#4a7a2c" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">RAINFOREST</text>
-                          <text x="318" y="293" font-size="8.5" fill="#5a7a20" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">HEATH / MOORLAND</text>
-                          <text x="558" y="293" font-size="8.5" fill="#8A6018" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">ALPINE</text>
-                          <text x="638" y="293" font-size="8.5" fill="#5588aa" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.9">ARCTIC</text>
-                          <text x="835" y="293" font-size="8.5" fill="#8A6018" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.75">DESCENT</text>
+                          
                           <!-- Main fill -->
-                          <path d="M 20,300 L 20,257 L 107,209 L 224,165 L 311,151 L 384,103 L 456,143 L 529,142 L 587,101 L 689,26 L 835,197 L 980,285 L 980,300 Z" fill="#F7F1E3" opacity="0.55"/>
+                          <path d="<?php echo $fill_d; ?>" fill="#F7F1E3" opacity="0.55"/>
+                          
                           <!-- Profile line -->
-                          <path d="M 20,257 L 107,209 L 224,165 L 311,151 L 384,103 L 456,143 L 529,142 L 587,101 L 689,26 L 835,197 L 980,285" fill="none" stroke="#A07828" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
-                          <!-- Accli annotation -->
-                          <path d="M 311,151 Q 384,58 456,143" fill="none" stroke="#C49A3C" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.8"/>
-                          <text x="384" y="46" font-size="9" fill="#7A5C18" text-anchor="middle" font-family="sans-serif" font-weight="700" font-style="italic">Climb high, sleep low</text>
-                          <text x="384" y="57" font-size="8" fill="#8A7250" text-anchor="middle" font-family="sans-serif">(acclimatisation day)</text>
-                          <!-- Summit glow -->
-                          <circle cx="689" cy="26" r="34" fill="url(#summitGlow2)"/>
-                          <!-- Day dividers -->
-                          <line x1="107" y1="300" x2="107" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <line x1="224" y1="300" x2="224" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <line x1="311" y1="300" x2="311" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <line x1="456" y1="300" x2="456" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <line x1="529" y1="300" x2="529" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <line x1="587" y1="300" x2="587" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <line x1="835" y1="300" x2="835" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>
-                          <!-- Day labels -->
-                          <text x="64"  y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D1</text>
-                          <text x="165" y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D2</text>
-                          <text x="267" y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D3</text>
-                          <text x="384" y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D4</text>
-                          <text x="493" y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D5</text>
-                          <text x="558" y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D6</text>
-                          <text x="711" y="13" font-size="8.5" fill="#B8860B" text-anchor="middle" font-family="sans-serif" font-weight="800">D7 — SUMMIT</text>
-                          <text x="907" y="13" font-size="8"   fill="#A07828" text-anchor="middle" font-family="sans-serif" font-weight="700" opacity="0.85">D8</text>
-                          <!-- Camp markers -->
-                          <circle cx="20"  cy="257" r="5.5" fill="#3D2E0A" stroke="#fff" stroke-width="2"/>
-                          <rect x="-14" y="263" width="68" height="15" fill="#3D2E0A" rx="3"/>
-                          <text x="20"  y="274" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">LEMOSHO</text>
-                          <text x="20"  y="252" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">2,100m</text>
-                          <circle cx="107" cy="209" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="69" y="191" width="76" height="15" fill="#A07828" rx="3"/>
-                          <text x="107" y="202" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">MTI MKUBWA</text>
-                          <text x="107" y="225" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">2,895m</text>
-                          <circle cx="224" cy="165" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="191" y="147" width="66" height="15" fill="#A07828" rx="3"/>
-                          <text x="224" y="158" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">SHIRA 1</text>
-                          <text x="224" y="181" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">3,610m</text>
-                          <circle cx="311" cy="151" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="278" y="133" width="66" height="15" fill="#A07828" rx="3"/>
-                          <text x="311" y="144" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">SHIRA 2</text>
-                          <text x="311" y="167" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">3,840m</text>
-                          <circle cx="384" cy="103" r="4.5" fill="#C49A3C" stroke="#fff" stroke-width="1.8"/>
-                          <text x="384" y="118" font-size="9" fill="#7A5C18" text-anchor="middle" font-family="sans-serif" font-weight="700" font-style="italic">4,630m</text>
-                          <circle cx="456" cy="143" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="418" y="152" width="76" height="15" fill="#A07828" rx="3"/>
-                          <text x="456" y="163" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">BARRANCO</text>
-                          <text x="456" y="136" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">3,976m</text>
-                          <circle cx="529" cy="142" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="493" y="152" width="72" height="15" fill="#A07828" rx="3"/>
-                          <text x="529" y="163" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">KARANGA</text>
-                          <text x="529" y="135" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">3,995m</text>
-                          <circle cx="587" cy="101" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="555" y="83" width="64" height="15" fill="#A07828" rx="3"/>
-                          <text x="587" y="94" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">BARAFU</text>
-                          <text x="587" y="117" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">4,673m</text>
-                          <circle cx="689" cy="26"  r="8" fill="#B8860B" stroke="#FFD700" stroke-width="3"/>
-                          <text x="689" y="30" font-size="10" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900">★</text>
-                          <rect x="651" y="35" width="76" height="15" fill="#B8860B" rx="3"/>
-                          <text x="689" y="46" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">UHURU PEAK</text>
-                          <text x="689" y="21" font-size="10" fill="#B8860B" text-anchor="middle" font-family="sans-serif" font-weight="800">5,895m</text>
-                          <circle cx="835" cy="197" r="5" fill="#A07828" stroke="#fff" stroke-width="2"/>
-                          <rect x="800" y="206" width="70" height="15" fill="#A07828" rx="3"/>
-                          <text x="835" y="217" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">MWEKA</text>
-                          <text x="835" y="191" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">3,100m</text>
-                          <circle cx="980" cy="285" r="5.5" fill="#3D2E0A" stroke="#fff" stroke-width="2"/>
-                          <rect x="936" y="268" width="88" height="15" fill="#3D2E0A" rx="3"/>
-                          <text x="980" y="279" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">MWEKA GATE</text>
-                          <text x="980" y="302" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">1,640m</text>
-                          <!-- X-axis ticks & labels -->
-                          <line x1="20"  y1="300" x2="20"  y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="107" y1="300" x2="107" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="224" y1="300" x2="224" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="311" y1="300" x2="311" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="456" y1="300" x2="456" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="529" y1="300" x2="529" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="587" y1="300" x2="587" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="689" y1="300" x2="689" y2="306" stroke="#B8860B" stroke-width="1.5"/>
-                          <line x1="835" y1="300" x2="835" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <line x1="980" y1="300" x2="980" y2="306" stroke="#D4B96A" stroke-width="1.2"/>
-                          <text x="20"  y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">0</text>
-                          <text x="107" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">6</text>
-                          <text x="224" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">14</text>
-                          <text x="311" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">20</text>
-                          <text x="456" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">30</text>
-                          <text x="529" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">35</text>
-                          <text x="587" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">39</text>
-                          <text x="689" y="317" font-size="9.5" fill="#B8860B" text-anchor="middle" font-family="sans-serif" font-weight="700">46</text>
-                          <text x="835" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">56</text>
-                          <text x="980" y="317" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">66 km</text>
-                          <text x="500" y="334" font-size="10" fill="#8A7250" text-anchor="middle" font-family="sans-serif" font-weight="600">Cumulative Distance (km) · Total Trek: 66 km</text>
+                          <path d="<?php echo $path_d; ?>" fill="none" stroke="#A07828" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+                          
+                          <?php
+                          // Draw points, labels, and day dividers
+                          $prev_day = 0;
+                          foreach ($points as $i => $p) {
+                              // Day dividers and labels
+                              if ($p['day'] > $prev_day && !isset($p['is_mid'])) {
+                                  echo '<line x1="'.$p['x'].'" y1="300" x2="'.$p['x'].'" y2="20" stroke="#D4B96A" stroke-width="0.7" stroke-dasharray="3 6" opacity="0.45"/>';
+                                  
+                                  // X-axis ticks & labels
+                                  echo '<line x1="'.$p['x'].'" y1="300" x2="'.$p['x'].'" y2="306" stroke="#D4B96A" stroke-width="1.2"/>';
+                                  echo '<text x="'.$p['x'].'" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">'.$p['dist'].'</text>';
+                                  
+                                  $prev_day = $p['day'];
+                              }
+                              
+                              if ($i === 0) {
+                                  echo '<line x1="'.$p['x'].'" y1="300" x2="'.$p['x'].'" y2="306" stroke="#D4B96A" stroke-width="1.2"/>';
+                                  echo '<text x="'.$p['x'].'" y="317" font-size="9.5" fill="#8A7250" text-anchor="middle" font-family="sans-serif">0</text>';
+                              }
+                              
+                              // Markers
+                              if (isset($p['is_summit']) && $p['is_summit']) {
+                                  echo '<circle cx="'.$p['x'].'" cy="'.$p['y'].'" r="34" fill="url(#summitGlow2)"/>';
+                                  echo '<circle cx="'.$p['x'].'" cy="'.$p['y'].'" r="8" fill="#B8860B" stroke="#FFD700" stroke-width="3"/>';
+                                  echo '<text x="'.$p['x'].'" y="'.($p['y']+4).'" font-size="10" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900">★</text>';
+                                  echo '<rect x="'.($p['x']-38).'" y="'.($p['y']+9).'" width="76" height="15" fill="#B8860B" rx="3"/>';
+                                  echo '<text x="'.$p['x'].'" y="'.($p['y']+20).'" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">'.$p['name'].'</text>';
+                                  echo '<text x="'.$p['x'].'" y="'.($p['y']-5).'" font-size="10" fill="#B8860B" text-anchor="middle" font-family="sans-serif" font-weight="800">'.number_format($p['elev']).'m</text>';
+                              } elseif (isset($p['is_mid']) && $p['is_mid']) {
+                                  echo '<circle cx="'.$p['x'].'" cy="'.$p['y'].'" r="4.5" fill="#C49A3C" stroke="#fff" stroke-width="1.8"/>';
+                                  echo '<text x="'.$p['x'].'" y="'.($p['y']+15).'" font-size="9" fill="#7A5C18" text-anchor="middle" font-family="sans-serif" font-weight="700" font-style="italic">'.number_format($p['elev']).'m</text>';
+                              } else {
+                                  $is_start_end = ($i === 0 || $i === count($points) - 1);
+                                  $color = $is_start_end ? '#3D2E0A' : '#A07828';
+                                  $r = $is_start_end ? 5.5 : 5;
+                                  
+                                  echo '<circle cx="'.$p['x'].'" cy="'.$p['y'].'" r="'.$r.'" fill="'.$color.'" stroke="#fff" stroke-width="2"/>';
+                                  
+                                  $rect_w = strlen($p['name']) * 6 + 10;
+                                  $rect_x = $p['x'] - ($rect_w/2);
+                                  $rect_y = $p['y'] + ($is_start_end && $i===0 ? 6 : ($is_start_end ? -17 : 9));
+                                  $text_y = $rect_y + 11;
+                                  $elev_y = $is_start_end && $i===0 ? $p['y'] - 5 : ($is_start_end ? $p['y'] + 17 : $p['y'] - 7);
+                                  
+                                  echo '<rect x="'.$rect_x.'" y="'.$rect_y.'" width="'.$rect_w.'" height="15" fill="'.$color.'" rx="3"/>';
+                                  echo '<text x="'.$p['x'].'" y="'.$text_y.'" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="700">'.$p['name'].'</text>';
+                                  echo '<text x="'.$p['x'].'" y="'.$elev_y.'" font-size="9.5" fill="#3D2E0A" text-anchor="middle" font-family="sans-serif" font-weight="700">'.number_format($p['elev']).'m</text>';
+                              }
+                          }
+                          ?>
+                          
+                          <text x="500" y="334" font-size="10" fill="#8A7250" text-anchor="middle" font-family="sans-serif" font-weight="600">Cumulative Distance (km) · Total Trek: <?php echo esc_html($total_distance); ?> km</text>
                         </svg>
                       </div>
                     </div>
                   </div>
                   <!-- ITINERARY SIDEBAR -->
                   <div class="mw-itin">
-                    <div class="mw-dc on" data-day="1">
-                      <div class="mw-db"><span>Day</span><strong>1</strong></div>
-                      <p class="mw-dlbl">Wilderness Gateway</p>
-                      <div class="mw-dtitle">Lemosho Gate → Mti Mkubwa</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 2,100m → 2,895m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 6 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 3–4 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Rainforest</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc" data-day="2">
-                      <div class="mw-db"><span>Day</span><strong>2</strong></div>
-                      <p class="mw-dlbl">Forest Transition</p>
-                      <div class="mw-dtitle">Mti Mkubwa → Shira 1</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 2,895m → 3,610m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 8 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 5–7 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Heath/Moorland</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc" data-day="3">
-                      <div class="mw-db"><span>Day</span><strong>3</strong></div>
-                      <p class="mw-dlbl">Plateau Crossing</p>
-                      <div class="mw-dtitle">Shira 1 → Shira 2</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 3,610m → 3,840m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 6 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 4–5 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Moorland</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc" data-day="4">
-                      <div class="mw-db"><span>Day</span><strong>4</strong></div>
-                      <p class="mw-dlbl">Altitude Challenge</p>
-                      <div class="mw-dtitle">Shira 2 → Lava Tower → Barranco</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 3,840m → 4,630m → 3,976m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 10 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 6–8 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Alpine Desert</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc" data-day="5">
-                      <div class="mw-db"><span>Day</span><strong>5</strong></div>
-                      <p class="mw-dlbl">Wall Conquest</p>
-                      <div class="mw-dtitle">Barranco → Karanga</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 3,976m → 3,995m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 5 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 4–5 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Alpine Desert</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc" data-day="6">
-                      <div class="mw-db"><span>Day</span><strong>6</strong></div>
-                      <p class="mw-dlbl">High Camp Arrival</p>
-                      <div class="mw-dtitle">Karanga → Barafu Camp</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 3,995m → 4,673m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 4 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 4–5 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Alpine Desert</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc summit-day" data-day="7">
-                      <div class="mw-db"><span>Day</span><strong>7</strong></div>
-                      <p class="mw-dlbl">★ SUMMIT DAY</p>
-                      <div class="mw-dtitle">Barafu → Uhuru Peak → Mweka</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 4,673m → 5,895m → 3,100m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 17 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 12–16 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Arctic → Rainforest</div>
-                      </div>
-                    </div>
-                    <div class="mw-dc" data-day="8">
-                      <div class="mw-db"><span>Day</span><strong>8</strong></div>
-                      <p class="mw-dlbl">Celebration Descent</p>
-                      <div class="mw-dtitle">Mweka Camp → Mweka Gate</div>
-                      <div class="mw-stats">
-                        <div class="mw-stat"><strong>Elev:</strong> 3,100m → 1,640m</div>
-                        <div class="mw-stat"><strong>Dist:</strong> 10 km</div>
-                        <div class="mw-stat"><strong>Time:</strong> 3–4 hrs</div>
-                        <div class="mw-stat"><strong>Zone:</strong> Rainforest</div>
-                      </div>
-                    </div>
+                    <?php
+                    $glance_rows = $get_field('ryder_glance', array());
+                    if ( !empty($glance_rows) && is_array($glance_rows) ) {
+                        foreach ( $glance_rows as $index => $row ) {
+                            $day_num = $index + 1;
+                            $is_summit = (stripos($row['route'], 'Uhuru') !== false || stripos($row['route'], 'Summit') !== false);
+                            $class = 'mw-dc' . ($index === 0 ? ' on' : '') . ($is_summit ? ' summit-day' : '');
+                            
+                            // Extract parts from route (e.g. "Lemosho Gate → Mti Mkubwa")
+                            $route_parts = explode('→', strip_tags($row['route']));
+                            $title = trim($row['route']);
+                            $lbl = "Day " . $day_num;
+                            if ($is_summit) {
+                                $lbl = "★ SUMMIT DAY";
+                            } elseif (isset($row['title']) && !empty($row['title'])) {
+                                $lbl = $row['title'];
+                            }
+                            
+                            ?>
+                            <div class="<?php echo esc_attr($class); ?>" data-day="<?php echo esc_attr($day_num); ?>" onclick="fd(<?php echo esc_attr($day_num); ?>)">
+                              <div class="mw-db"><span>Day</span><strong><?php echo esc_html(preg_replace('/[^0-9]/', '', $row['day'])); ?></strong></div>
+                              <p class="mw-dlbl"><?php echo esc_html($lbl); ?></p>
+                              <div class="mw-dtitle"><?php echo wp_kses_post($title); ?></div>
+                              <div class="mw-stats">
+                                <div class="mw-stat"><strong>Elev:</strong> <?php echo esc_html($row['elev']); ?></div>
+                                <div class="mw-stat"><strong>Dist:</strong> <?php echo esc_html($row['dist']); ?></div>
+                                <div class="mw-stat"><strong>Time:</strong> <?php echo esc_html($row['time']); ?></div>
+                                <div class="mw-stat"><strong>Zone:</strong> <?php echo esc_html($row['zone']); ?></div>
+                              </div>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        // Fallback static HTML
+                        ?>
+                        <div class="mw-dc on" data-day="1" onclick="fd(1)">
+                          <div class="mw-db"><span>Day</span><strong>1</strong></div>
+                          <p class="mw-dlbl">Wilderness Gateway</p>
+                          <div class="mw-dtitle">Lemosho Gate → Mti Mkubwa</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 2,100m → 2,895m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 6 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 3–4 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Rainforest</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc" data-day="2" onclick="fd(2)">
+                          <div class="mw-db"><span>Day</span><strong>2</strong></div>
+                          <p class="mw-dlbl">Forest Transition</p>
+                          <div class="mw-dtitle">Mti Mkubwa → Shira 1</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 2,895m → 3,610m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 8 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 5–7 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Heath/Moorland</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc" data-day="3" onclick="fd(3)">
+                          <div class="mw-db"><span>Day</span><strong>3</strong></div>
+                          <p class="mw-dlbl">Plateau Crossing</p>
+                          <div class="mw-dtitle">Shira 1 → Shira 2</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 3,610m → 3,840m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 6 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 4–5 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Moorland</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc" data-day="4" onclick="fd(4)">
+                          <div class="mw-db"><span>Day</span><strong>4</strong></div>
+                          <p class="mw-dlbl">Altitude Challenge</p>
+                          <div class="mw-dtitle">Shira 2 → Lava Tower → Barranco</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 3,840m → 4,630m → 3,976m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 10 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 6–8 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Alpine Desert</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc" data-day="5" onclick="fd(5)">
+                          <div class="mw-db"><span>Day</span><strong>5</strong></div>
+                          <p class="mw-dlbl">Wall Conquest</p>
+                          <div class="mw-dtitle">Barranco → Karanga</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 3,976m → 3,995m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 5 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 4–5 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Alpine Desert</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc" data-day="6" onclick="fd(6)">
+                          <div class="mw-db"><span>Day</span><strong>6</strong></div>
+                          <p class="mw-dlbl">High Camp Arrival</p>
+                          <div class="mw-dtitle">Karanga → Barafu Camp</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 3,995m → 4,673m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 4 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 4–5 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Alpine Desert</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc summit-day" data-day="7" onclick="fd(7)">
+                          <div class="mw-db"><span>Day</span><strong>7</strong></div>
+                          <p class="mw-dlbl">★ SUMMIT DAY</p>
+                          <div class="mw-dtitle">Barafu → Uhuru Peak → Mweka</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 4,673m → 5,895m → 3,100m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 17 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 12–16 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Arctic → Rainforest</div>
+                          </div>
+                        </div>
+                        <div class="mw-dc" data-day="8" onclick="fd(8)">
+                          <div class="mw-db"><span>Day</span><strong>8</strong></div>
+                          <p class="mw-dlbl">Celebration Descent</p>
+                          <div class="mw-dtitle">Mweka Camp → Mweka Gate</div>
+                          <div class="mw-stats">
+                            <div class="mw-stat"><strong>Elev:</strong> 3,100m → 1,640m</div>
+                            <div class="mw-stat"><strong>Dist:</strong> 10 km</div>
+                            <div class="mw-stat"><strong>Time:</strong> 3–4 hrs</div>
+                            <div class="mw-stat"><strong>Zone:</strong> Rainforest</div>
+                          </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
                   </div>
                 </div>
               </div>

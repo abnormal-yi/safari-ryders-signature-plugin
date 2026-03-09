@@ -1,27 +1,58 @@
 document.addEventListener('DOMContentLoaded', function() {
-  if (!document.getElementById('s-map')) return;
+  var mapContainer = document.getElementById('s-map');
+  if (!mapContainer) return;
 
-  var stops=[
-    {id:'lemosho',   type:'start',  day:'Start', name:'Lemosho Gate',  lat:-3.0670,lng:37.0530,elev:'2,100m'},
-    {id:'mti',       type:'camp',   day:'Day 1', name:'Mti Mkubwa',    lat:-3.0450,lng:37.0850,elev:'2,895m'},
-    {id:'shira1',    type:'camp',   day:'Day 2', name:'Shira 1 Camp',  lat:-3.0280,lng:37.1100,elev:'3,610m'},
-    {id:'shira2',    type:'camp',   day:'Day 3', name:'Shira 2 Camp',  lat:-3.0100,lng:37.1350,elev:'3,840m'},
-    {id:'lava',      type:'camp',   day:'Day 4', name:'Lava Tower',    lat:-3.0500,lng:37.2000,elev:'4,630m'},
-    {id:'barranco',  type:'camp',   day:'Day 4', name:'Barranco Camp', lat:-3.0750,lng:37.2250,elev:'3,976m'},
-    {id:'karanga',   type:'camp',   day:'Day 5', name:'Karanga Camp',  lat:-3.0850,lng:37.2600,elev:'3,995m'},
-    {id:'barafu',    type:'camp',   day:'Day 6', name:'Barafu Camp',   lat:-3.0650,lng:37.2950,elev:'4,673m'},
-    {id:'summit',    type:'summit', day:'Day 7', name:'Uhuru Peak',    lat:-3.0759,lng:37.3537,elev:'5,895m'},
-    {id:'mweka',     type:'camp',   day:'Day 7', name:'Mweka Camp',    lat:-3.1050,lng:37.3200,elev:'3,100m'},
-    {id:'mwekagate', type:'end',    day:'Day 8', name:'Mweka Gate',    lat:-3.1450,lng:37.3100,elev:'1,640m'}
-  ];
-  var fullRoute=[
-    [-3.0670,37.0530],[-3.0450,37.0850],[-3.0280,37.1100],[-3.0100,37.1350],
-    [-3.0500,37.2000],[-3.0750,37.2250],[-3.0850,37.2600],[-3.0650,37.2950],
-    [-3.0759,37.3537],[-3.1050,37.3200],[-3.1450,37.3100]
-  ];
-  var map=L.map('s-map',{center:[-3.07,37.20],zoom:10,zoomControl:true,scrollWheelZoom:false});
+  // Try to parse dynamic stops from data attribute, fallback to default Lemosho route
+  var stops = [];
+  var fullRoute = [];
+  
+  try {
+    var rawStops = mapContainer.getAttribute('data-stops');
+    if (rawStops) {
+      stops = JSON.parse(rawStops);
+      if (stops && stops.length > 0) {
+        stops.forEach(function(s) {
+          fullRoute.push([s.lat, s.lng]);
+        });
+      }
+    }
+  } catch(e) {
+    console.error("Error parsing map stops", e);
+  }
+
+  // Fallback if no dynamic data
+  if (!stops || stops.length === 0) {
+    stops=[
+      {id:'lemosho',   type:'start',  day:'Start', name:'Lemosho Gate',  lat:-3.0670,lng:37.0530,elev:'2,100m'},
+      {id:'mti',       type:'camp',   day:'Day 1', name:'Mti Mkubwa',    lat:-3.0450,lng:37.0850,elev:'2,895m'},
+      {id:'shira1',    type:'camp',   day:'Day 2', name:'Shira 1 Camp',  lat:-3.0280,lng:37.1100,elev:'3,610m'},
+      {id:'shira2',    type:'camp',   day:'Day 3', name:'Shira 2 Camp',  lat:-3.0100,lng:37.1350,elev:'3,840m'},
+      {id:'lava',      type:'camp',   day:'Day 4', name:'Lava Tower',    lat:-3.0500,lng:37.2000,elev:'4,630m'},
+      {id:'barranco',  type:'camp',   day:'Day 4', name:'Barranco Camp', lat:-3.0750,lng:37.2250,elev:'3,976m'},
+      {id:'karanga',   type:'camp',   day:'Day 5', name:'Karanga Camp',  lat:-3.0850,lng:37.2600,elev:'3,995m'},
+      {id:'barafu',    type:'camp',   day:'Day 6', name:'Barafu Camp',   lat:-3.0650,lng:37.2950,elev:'4,673m'},
+      {id:'summit',    type:'summit', day:'Day 7', name:'Uhuru Peak',    lat:-3.0759,lng:37.3537,elev:'5,895m'},
+      {id:'mweka',     type:'camp',   day:'Day 7', name:'Mweka Camp',    lat:-3.1050,lng:37.3200,elev:'3,100m'},
+      {id:'mwekagate', type:'end',    day:'Day 8', name:'Mweka Gate',    lat:-3.1450,lng:37.3100,elev:'1,640m'}
+    ];
+    fullRoute=[
+      [-3.0670,37.0530],[-3.0450,37.0850],[-3.0280,37.1100],[-3.0100,37.1350],
+      [-3.0500,37.2000],[-3.0750,37.2250],[-3.0850,37.2600],[-3.0650,37.2950],
+      [-3.0759,37.3537],[-3.1050,37.3200],[-3.1450,37.3100]
+    ];
+  }
+
+  // Calculate bounds based on actual route
+  var lats = fullRoute.map(function(p){return p[0];});
+  var lngs = fullRoute.map(function(p){return p[1];});
+  var minLat = Math.min.apply(null, lats);
+  var maxLat = Math.max.apply(null, lats);
+  var minLng = Math.min.apply(null, lngs);
+  var maxLng = Math.max.apply(null, lngs);
+
+  var map=L.map('s-map',{center:[(minLat+maxLat)/2, (minLng+maxLng)/2],zoom:10,zoomControl:true,scrollWheelZoom:false});
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(map);
-  map.fitBounds([[-3.18,37.00],[-2.98,37.40]],{padding:[40,40]});
+  map.fitBounds([[minLat-0.05, minLng-0.05],[maxLat+0.05, maxLng+0.05]],{padding:[40,40]});
   var mmap={},animLine=null,dotMarker=null,raf=null,loopTimer=null;
   function lerp(a,b,t){return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
   function ease(t){return t<0.5?2*t*t:1-2*(1-t)*(1-t);}
@@ -92,16 +123,28 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   setTimeout(window.runAnimation,800);
 
-  var views={
-    1:{c:[-3.055,37.07],z:12,id:'mti'},
-    2:{c:[-3.028,37.11],z:12,id:'shira1'},
-    3:{c:[-3.010,37.135],z:12,id:'shira2'},
-    4:{c:[-3.065,37.21],z:11,id:'barranco'},
-    5:{c:[-3.080,37.24],z:12,id:'karanga'},
-    6:{c:[-3.065,37.295],z:12,id:'barafu'},
-    7:{c:[-3.076,37.354],z:13,id:'summit'},
-    8:{c:[-3.127,37.31],z:11,id:'mwekagate'}
-  };
+  // Dynamic views based on stops
+  var views = {};
+  stops.forEach(function(s, index) {
+      // Extract day number for the view mapping
+      var dayMatch = s.day.match(/\d+/);
+      var dayNum = dayMatch ? parseInt(dayMatch[0]) : (index === 0 ? 1 : index);
+      // For summit, we might want to map it to the same day as the previous camp if they share a day
+      if (s.type === 'summit') {
+          // Find the day number from the itinerary sidebar if possible, or just use the index
+          var dayCards = document.querySelectorAll('.mw-dc.summit-day');
+          if (dayCards.length > 0) {
+              dayNum = parseInt(dayCards[0].getAttribute('data-day'));
+          }
+      }
+      
+      views[dayNum] = {c: [s.lat, s.lng], z: 12, id: s.id};
+  });
+
+  // Ensure we have a view for day 1 if it wasn't explicitly set
+  if (!views[1] && stops.length > 0) {
+      views[1] = {c: [stops[0].lat, stops[0].lng], z: 12, id: stops[0].id};
+  }
 
   window.fd = function(day){
     document.querySelectorAll('.mw-dc').forEach(function(c){c.classList.remove('on');});
