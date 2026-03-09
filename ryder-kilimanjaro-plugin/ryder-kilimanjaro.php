@@ -17,6 +17,13 @@ define( 'RYDER_KILIMANJARO_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once RYDER_KILIMANJARO_PLUGIN_DIR . 'includes/cpt-kilimanjaro.php';
 require_once RYDER_KILIMANJARO_PLUGIN_DIR . 'includes/shortcode-kilimanjaro.php';
 
+// Flush rewrite rules on activation
+register_activation_hook( __FILE__, 'ryder_kilimanjaro_rewrite_flush' );
+function ryder_kilimanjaro_rewrite_flush() {
+    ryder_register_kilimanjaro_cpt();
+    flush_rewrite_rules();
+}
+
 // Automatically load ACF fields from JSON
 add_action( 'acf/init', 'ryder_kilimanjaro_load_acf_fields' );
 function ryder_kilimanjaro_load_acf_fields() {

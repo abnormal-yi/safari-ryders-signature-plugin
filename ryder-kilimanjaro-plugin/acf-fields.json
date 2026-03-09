@@ -219,6 +219,192 @@
                         "ui": 1
                     }
                 ]
+            },
+            {
+                "key": "field_kili_glance_tab",
+                "label": "At a Glance",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_glance",
+                "label": "At a Glance Table",
+                "name": "ryder_glance",
+                "type": "repeater",
+                "layout": "table",
+                "sub_fields": [
+                    {
+                        "key": "field_kg_day",
+                        "label": "Day",
+                        "name": "day",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kg_route",
+                        "label": "Route",
+                        "name": "route",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kg_elev",
+                        "label": "Elevation",
+                        "name": "elev",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kg_dist",
+                        "label": "Distance",
+                        "name": "dist",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kg_time",
+                        "label": "Time",
+                        "name": "time",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kg_zone",
+                        "label": "Zone",
+                        "name": "zone",
+                        "type": "text"
+                    }
+                ]
+            },
+            {
+                "key": "field_kili_map_tab",
+                "label": "Map Stops",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_map_stops",
+                "label": "Map Stops (Auto-Coordinates)",
+                "name": "ryder_map_stops",
+                "type": "repeater",
+                "instructions": "Enter the name of the place. The plugin will automatically find coordinates.",
+                "layout": "table",
+                "sub_fields": [
+                    {
+                        "key": "field_kms_type",
+                        "label": "Type",
+                        "name": "type",
+                        "type": "select",
+                        "choices": {
+                            "start": "Start",
+                            "camp": "Camp",
+                            "summit": "Summit",
+                            "end": "End"
+                        }
+                    },
+                    {
+                        "key": "field_kms_day",
+                        "label": "Day Label (e.g. Day 2)",
+                        "name": "day",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kms_name",
+                        "label": "Place Name (e.g. Shira Camp)",
+                        "name": "name",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kms_elev",
+                        "label": "Elevation (e.g. 3,840m)",
+                        "name": "elev",
+                        "type": "text"
+                    }
+                ]
+            },
+            {
+                "key": "field_kili_inc_exc_tab",
+                "label": "Inclusions/Exclusions",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_inclusions",
+                "label": "Inclusions (One per line)",
+                "name": "ryder_inclusions",
+                "type": "textarea"
+            },
+            {
+                "key": "field_kili_exclusions",
+                "label": "Exclusions (One per line)",
+                "name": "ryder_exclusions",
+                "type": "textarea"
+            },
+            {
+                "key": "field_kili_supps_tab",
+                "label": "Supplements",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_supplements",
+                "label": "Optional Supplements",
+                "name": "ryder_supplements",
+                "type": "repeater",
+                "layout": "table",
+                "sub_fields": [
+                    {
+                        "key": "field_ks_icon",
+                        "label": "Emoji Icon",
+                        "name": "icon",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_ks_name",
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_ks_price",
+                        "label": "Price",
+                        "name": "price",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_ks_note",
+                        "label": "Note",
+                        "name": "note",
+                        "type": "textarea"
+                    }
+                ]
+            },
+            {
+                "key": "field_kili_faqs_tab",
+                "label": "FAQs",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_faqs",
+                "label": "Frequently Asked Questions",
+                "name": "ryder_faqs",
+                "type": "repeater",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kf_q",
+                        "label": "Question",
+                        "name": "question",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kf_a",
+                        "label": "Answer",
+                        "name": "answer",
+                        "type": "wysiwyg"
+                    }
+                ]
             }
         ],
         "location": [
