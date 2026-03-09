@@ -1,0 +1,33 @@
+{
+    "version": "0.4",
+    "title": "Ryder Kilimanjaro Single Template",
+    "type": "single",
+    "content": [
+        {
+            "id": "ryder_kilimanjaro_section",
+            "elType": "section",
+            "settings": {
+                "content_width": "full"
+            },
+            "elements": [
+                {
+                    "id": "ryder_kilimanjaro_column",
+                    "elType": "column",
+                    "settings": {
+                        "_column_size": 100
+                    },
+                    "elements": [
+                        {
+                            "id": "ryder_kilimanjaro_shortcode",
+                            "elType": "widget",
+                            "settings": {
+                                "shortcode": "[ryder_kilimanjaro]"
+                            },
+                            "widgetType": "shortcode"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

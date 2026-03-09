@@ -1,0 +1,244 @@
+[
+    {
+        "key": "group_ryder_kilimanjaro",
+        "title": "Ryder Signature Kilimanjaro Settings",
+        "fields": [
+            {
+                "key": "field_kili_hero_tab",
+                "label": "Hero Section",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_hero_badge",
+                "label": "Hero Badge",
+                "name": "ryder_hero_badge",
+                "type": "text",
+                "default_value": "⭐ 4.9/5 · 312 Reviews · 90–95% Summit Success"
+            },
+            {
+                "key": "field_kili_hero_title",
+                "label": "Hero Title",
+                "name": "ryder_hero_title",
+                "type": "text",
+                "default_value": "Lemosho Route 8-Day Kilimanjaro Climb:<br>Africa's Most Scenic Summit Path"
+            },
+            {
+                "key": "field_kili_hero_subtitle",
+                "label": "Hero Subtitle",
+                "name": "ryder_hero_subtitle",
+                "type": "textarea",
+                "default_value": "Traverse the pristine western wilderness of Kilimanjaro through ancient rainforest and the breathtaking Shira Plateau. The 8-day Lemosho Route delivers unmatched scenic beauty, excellent acclimatisation, and the uncrowded experience discerning climbers seek."
+            },
+            {
+                "key": "field_kili_duration",
+                "label": "Total Duration",
+                "name": "ryder_duration",
+                "type": "text",
+                "default_value": "10 Days"
+            },
+            {
+                "key": "field_kili_summit_elev",
+                "label": "Summit Elevation",
+                "name": "ryder_summit_elev",
+                "type": "text",
+                "default_value": "5,895m"
+            },
+            {
+                "key": "field_kili_distance",
+                "label": "Trek Distance",
+                "name": "ryder_distance",
+                "type": "text",
+                "default_value": "66 km"
+            },
+            {
+                "key": "field_kili_elev_gain",
+                "label": "Elevation Gain",
+                "name": "ryder_elev_gain",
+                "type": "text",
+                "default_value": "4,449m"
+            },
+            {
+                "key": "field_kili_success_rate",
+                "label": "Success Rate",
+                "name": "ryder_success_rate",
+                "type": "text",
+                "default_value": "90–95%"
+            },
+            {
+                "key": "field_kili_overview_tab",
+                "label": "Overview",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_overview_title",
+                "label": "Overview Title",
+                "name": "ryder_overview_title",
+                "type": "text",
+                "default_value": "Why the Lemosho Route Represents Kilimanjaro's Finest"
+            },
+            {
+                "key": "field_kili_overview_content",
+                "label": "Overview Content",
+                "name": "ryder_overview_content",
+                "type": "wysiwyg",
+                "default_value": "<p>The Lemosho Route 8-day Kilimanjaro itinerary consistently ranks as the mountain's premier climbing option among experienced guides and returning climbers.</p>"
+            },
+            {
+                "key": "field_kili_features",
+                "label": "Overview Features",
+                "name": "ryder_features",
+                "type": "repeater",
+                "layout": "table",
+                "sub_fields": [
+                    {
+                        "key": "field_kf_icon",
+                        "label": "Emoji Icon",
+                        "name": "icon",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kf_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kf_desc",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "textarea"
+                    }
+                ]
+            },
+            {
+                "key": "field_kili_pricing_tab",
+                "label": "Pricing",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_pricing",
+                "label": "Pricing Tiers",
+                "name": "ryder_pricing",
+                "type": "repeater",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kp_group",
+                        "label": "Group Size",
+                        "name": "group",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kp_price",
+                        "label": "Price",
+                        "name": "price",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kp_features",
+                        "label": "Features (One per line)",
+                        "name": "features",
+                        "type": "textarea"
+                    },
+                    {
+                        "key": "field_kp_featured",
+                        "label": "Is Featured (Most Popular)?",
+                        "name": "is_featured",
+                        "type": "true_false",
+                        "ui": 1
+                    }
+                ]
+            },
+            {
+                "key": "field_kili_days_tab",
+                "label": "Day-by-Day",
+                "name": "",
+                "type": "tab",
+                "placement": "top"
+            },
+            {
+                "key": "field_kili_days",
+                "label": "Day-by-Day Itinerary",
+                "name": "ryder_days",
+                "type": "repeater",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kd_num",
+                        "label": "Day Number",
+                        "name": "day_num",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kd_eyebrow",
+                        "label": "Eyebrow Text",
+                        "name": "eyebrow",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kd_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kd_meta",
+                        "label": "Meta Info (One per line)",
+                        "name": "meta",
+                        "type": "textarea"
+                    },
+                    {
+                        "key": "field_kd_body",
+                        "label": "Body Content",
+                        "name": "body",
+                        "type": "wysiwyg"
+                    },
+                    {
+                        "key": "field_kd_highlights",
+                        "label": "Highlights (One per line)",
+                        "name": "highlights",
+                        "type": "textarea"
+                    },
+                    {
+                        "key": "field_kd_accom",
+                        "label": "Accommodation",
+                        "name": "accom",
+                        "type": "text"
+                    },
+                    {
+                        "key": "field_kd_is_summit",
+                        "label": "Is Summit Day?",
+                        "name": "is_summit",
+                        "type": "true_false",
+                        "ui": 1
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "kilimanjaro"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": [
+            "the_content"
+        ],
+        "active": true,
+        "description": "Fields for Ryder Signature Kilimanjaro Routes"
+    }
+]
