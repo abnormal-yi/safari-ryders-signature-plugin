@@ -35,18 +35,18 @@ function ryder_kilimanjaro_shortcode( $atts ) {
         <!-- HERO -->
         <section class="hero">
           <div class="hero__inner">
-            <div class="hero__badge">⭐ 4.9/5 · 312 Reviews · 90–95% Summit Success</div>
-            <h1 class="hero__title">Lemosho Route 8-Day Kilimanjaro Climb:<br>Africa's Most Scenic Summit Path</h1>
-            <p class="hero__subtitle">Traverse the pristine western wilderness of Kilimanjaro through ancient rainforest and the breathtaking Shira Plateau. The 8-day Lemosho Route delivers unmatched scenic beauty, excellent acclimatisation, and the uncrowded experience discerning climbers seek.</p>
+            <div class="hero__badge"><?php echo esc_html( $get_field('ryder_hero_badge', '⭐ 4.9/5 · 312 Reviews · 90–95% Summit Success') ); ?></div>
+            <h1 class="hero__title"><?php echo wp_kses_post( $get_field('ryder_hero_title', "Lemosho Route 8-Day Kilimanjaro Climb:<br>Africa's Most Scenic Summit Path") ); ?></h1>
+            <p class="hero__subtitle"><?php echo esc_html( $get_field('ryder_hero_subtitle', 'Traverse the pristine western wilderness of Kilimanjaro through ancient rainforest and the breathtaking Shira Plateau. The 8-day Lemosho Route delivers unmatched scenic beauty, excellent acclimatisation, and the uncrowded experience discerning climbers seek.') ); ?></p>
             <div class="hero__stats">
-              <div class="hero__stat"><span class="hero__stat-val">10 Days</span><span class="hero__stat-lbl">Total Duration</span></div>
-              <div class="hero__stat"><span class="hero__stat-val">5,895m</span><span class="hero__stat-lbl">Uhuru Peak</span></div>
-              <div class="hero__stat"><span class="hero__stat-val">66 km</span><span class="hero__stat-lbl">Trek Distance</span></div>
-              <div class="hero__stat"><span class="hero__stat-val">4,449m</span><span class="hero__stat-lbl">Elevation Gain</span></div>
-              <div class="hero__stat"><span class="hero__stat-val">90–95%</span><span class="hero__stat-lbl">Success Rate</span></div>
+              <div class="hero__stat"><span class="hero__stat-val"><?php echo esc_html( $get_field('ryder_duration', '10 Days') ); ?></span><span class="hero__stat-lbl">Total Duration</span></div>
+              <div class="hero__stat"><span class="hero__stat-val"><?php echo esc_html( $get_field('ryder_summit_elev', '5,895m') ); ?></span><span class="hero__stat-lbl">Uhuru Peak</span></div>
+              <div class="hero__stat"><span class="hero__stat-val"><?php echo esc_html( $get_field('ryder_distance', '66 km') ); ?></span><span class="hero__stat-lbl">Trek Distance</span></div>
+              <div class="hero__stat"><span class="hero__stat-val"><?php echo esc_html( $get_field('ryder_elev_gain', '4,449m') ); ?></span><span class="hero__stat-lbl">Elevation Gain</span></div>
+              <div class="hero__stat"><span class="hero__stat-val"><?php echo esc_html( $get_field('ryder_success_rate', '90–95%') ); ?></span><span class="hero__stat-lbl">Success Rate</span></div>
             </div>
             <div class="hero__ctas">
-              <a href="#" class="btn btn--gold ryder-trigger-popup">Book Your Lemosho Adventure →</a>
+              <a href="#" class="btn btn--gold ryder-trigger-popup">Book Your Adventure →</a>
               <a href="#itinerary" class="btn btn--outline">View Full Itinerary</a>
             </div>
           </div>
@@ -56,11 +56,11 @@ function ryder_kilimanjaro_shortcode( $atts ) {
         <section class="section">
           <div class="container">
             <div class="facts-grid">
-              <div class="fact-card"><div class="fact-card__label">Duration</div><div class="fact-card__value">10 Days (8 climbing days)</div></div>
+              <div class="fact-card"><div class="fact-card__label">Duration</div><div class="fact-card__value"><?php echo esc_html( $get_field('ryder_duration', '10 Days') ); ?></div></div>
               <div class="fact-card"><div class="fact-card__label">Route</div><div class="fact-card__value">Lemosho Glades → Mweka Gate</div></div>
-              <div class="fact-card"><div class="fact-card__label">Distance</div><div class="fact-card__value">66 km (41 miles)</div></div>
-              <div class="fact-card"><div class="fact-card__label">Starting Elevation</div><div class="fact-card__value">2,100m (6,890 ft)</div></div>
-              <div class="fact-card"><div class="fact-card__label">Summit Elevation</div><div class="fact-card__value">5,895m (19,341 ft)</div></div>
+              <div class="fact-card"><div class="fact-card__label">Distance</div><div class="fact-card__value"><?php echo esc_html( $get_field('ryder_distance', '66 km') ); ?></div></div>
+              <div class="fact-card"><div class="fact-card__label">Starting Elevation</div><div class="fact-card__value">2,100m</div></div>
+              <div class="fact-card"><div class="fact-card__label">Summit Elevation</div><div class="fact-card__value"><?php echo esc_html( $get_field('ryder_summit_elev', '5,895m') ); ?></div></div>
               <div class="fact-card"><div class="fact-card__label">Difficulty</div><div class="fact-card__value">Moderate to Challenging</div></div>
               <div class="fact-card"><div class="fact-card__label">Best Seasons</div><div class="fact-card__value">Jan–Mar · Jun–Oct</div></div>
               <div class="fact-card"><div class="fact-card__label">Group Size</div><div class="fact-card__value">Private (2+ climbers)</div></div>
@@ -77,39 +77,38 @@ function ryder_kilimanjaro_shortcode( $atts ) {
               <div>
                 <div class="sec-header">
                   <span class="sec-header__eyebrow">Route Overview</span>
-                  <h2 class="sec-header__title">Why the Lemosho Route Represents Kilimanjaro's Finest</h2>
+                  <h2 class="sec-header__title"><?php echo esc_html( $get_field('ryder_overview_title', "Why the Lemosho Route Represents Kilimanjaro's Finest") ); ?></h2>
                   <div class="divider"></div>
                 </div>
 
-                <p>The Lemosho Route 8-day Kilimanjaro itinerary consistently ranks as the mountain's premier climbing option among experienced guides and returning climbers. This western approach delivers what serious adventurers seek: pristine wilderness, exceptional scenery, manageable crowds, and acclimatisation profiles that translate directly to summit success rates exceeding 90%.</p>
-
-                <p>Where other routes funnel climbers through well-worn paths, the Lemosho enters Kilimanjaro from the remote western slopes via the lush Lemosho Glades. The first two days traverse genuine wilderness where elephant and buffalo sightings remain possible — a wild introduction unavailable on busier routes. The gradual ascent through the Shira Plateau provides extended acclimatisation impossible to replicate on faster approaches.</p>
-
-                <p>The Shira Plateau crossing defines this route's character. This vast, otherworldly landscape — the collapsed caldera of Kilimanjaro's oldest volcanic cone — stretches beneath Kibo Peak's imposing western face. Nowhere else on the mountain offers such expansive vistas combined with relatively gentle terrain. Climbers consistently describe these days as transformative, the mountain's scale becoming tangible through sustained immersion.</p>
-
-                <p>RYDER Signature particularly recommends the 8-day Lemosho Route for photographers, nature enthusiasts, those seeking uncrowded trails, and any climber prioritising experience quality alongside summit success.</p>
+                <div class="overview-content">
+                    <?php echo wp_kses_post( $get_field('ryder_overview_content', '<p>The Lemosho Route 8-day Kilimanjaro itinerary consistently ranks as the mountain\'s premier climbing option among experienced guides and returning climbers.</p>') ); ?>
+                </div>
 
                 <div class="overview-features">
-                  <div class="feature-card">
-                    <div class="feature-card__icon">🌿</div>
-                    <div class="feature-card__title">Wilderness Immersion</div>
-                    <p class="feature-card__text">Remote western trailhead with possible elephant and buffalo encounters in ancient montane forest.</p>
-                  </div>
-                  <div class="feature-card">
-                    <div class="feature-card__icon">🏔️</div>
-                    <div class="feature-card__title">Exceptional Scenery</div>
-                    <p class="feature-card__text">The full Shira Plateau crossing — 16km beneath Kibo's western face — delivers Kilimanjaro's finest panoramas.</p>
-                  </div>
-                  <div class="feature-card">
-                    <div class="feature-card__icon">📈</div>
-                    <div class="feature-card__title">Superior Acclimatisation</div>
-                    <p class="feature-card__text">Gradual elevation profile with a dedicated "climb high, sleep low" day at Lava Tower boosts summit success.</p>
-                  </div>
-                  <div class="feature-card">
-                    <div class="feature-card__icon">🧭</div>
-                    <div class="feature-card__title">Lower Crowds</div>
-                    <p class="feature-card__text">Remote trailhead deters casual climbers, creating more intimate camps and quieter trails throughout.</p>
-                  </div>
+                  <?php
+                  $features = $get_field('ryder_features', array());
+                  if ( !empty($features) && is_array($features) ) {
+                      foreach ( $features as $feature ) {
+                          ?>
+                          <div class="feature-card">
+                            <div class="feature-card__icon"><?php echo esc_html($feature['icon']); ?></div>
+                            <div class="feature-card__title"><?php echo esc_html($feature['title']); ?></div>
+                            <p class="feature-card__text"><?php echo esc_html($feature['description']); ?></p>
+                          </div>
+                          <?php
+                      }
+                  } else {
+                      // Fallback
+                      ?>
+                      <div class="feature-card">
+                        <div class="feature-card__icon">🌿</div>
+                        <div class="feature-card__title">Wilderness Immersion</div>
+                        <p class="feature-card__text">Remote western trailhead with possible elephant and buffalo encounters in ancient montane forest.</p>
+                      </div>
+                      <?php
+                  }
+                  ?>
                 </div>
               </div>
 
@@ -122,22 +121,28 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                   </div>
                   <div class="callout__body">
                     <div class="price-slab">
-                      <div class="price-row">
-                        <span class="price-row__group">Solo Climber</span>
-                        <span class="price-row__price">$4,800 <span>/ person</span></span>
-                      </div>
-                      <div class="price-row">
-                        <span class="price-row__group">2 Climbers</span>
-                        <span class="price-row__price">$3,900 <span>/ person</span></span>
-                      </div>
-                      <div class="price-row">
-                        <span class="price-row__group">3–4 Climbers</span>
-                        <span class="price-row__price">$3,500 <span>/ person</span></span>
-                      </div>
-                      <div class="price-row">
-                        <span class="price-row__group">5+ Climbers</span>
-                        <span class="price-row__price">$3,200 <span>/ person</span></span>
-                      </div>
+                      <?php
+                      $pricing = $get_field('ryder_pricing', array());
+                      if ( !empty($pricing) && is_array($pricing) ) {
+                          foreach ( $pricing as $price ) {
+                              $is_featured = isset($price['is_featured']) && $price['is_featured'] ? ' style="background:var(--gold-bg);"' : '';
+                              ?>
+                              <div class="price-row"<?php echo $is_featured; ?>>
+                                <span class="price-row__group"><?php echo esc_html($price['group']); ?></span>
+                                <span class="price-row__price"><?php echo esc_html($price['price']); ?> <span>/ person</span></span>
+                              </div>
+                              <?php
+                          }
+                      } else {
+                          // Fallback
+                          ?>
+                          <div class="price-row">
+                            <span class="price-row__group">Solo Climber</span>
+                            <span class="price-row__price">$4,800 <span>/ person</span></span>
+                          </div>
+                          <?php
+                      }
+                      ?>
                     </div>
                     <p class="callout__note"><strong>All prices include:</strong> Park fees, professional guides, porters, all mountain meals, tents, emergency oxygen, and airport transfers. <a href="#inclusions">Full inclusions list ↓</a></p>
                     <a href="#" class="btn btn--gold ryder-trigger-popup" style="width:100%;justify-content:center;margin-bottom:10px;">Request a Quote →</a>
@@ -145,6 +150,65 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ITINERARY AT A GLANCE -->
+        <section class="section" id="glance">
+          <div class="container">
+            <div class="sec-header">
+              <span class="sec-header__eyebrow">Itinerary at a Glance</span>
+              <h2 class="sec-header__title">Your <?php echo esc_html( $get_field('ryder_duration', '10 Days') ); ?> Journey</h2>
+              <div class="divider"></div>
+              <p class="sec-header__lead">From arrival to your return — every day, every elevation, every detail at a glance.</p>
+            </div>
+            <div style="overflow-x:auto;">
+            <table class="glance-table">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Stage &amp; Destination</th>
+                  <th>Elevation</th>
+                  <th>Distance</th>
+                  <th>Duration</th>
+                  <th>Zone</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $glance_rows = $get_field('ryder_glance', array());
+                if ( !empty($glance_rows) && is_array($glance_rows) ) {
+                    foreach ( $glance_rows as $row ) {
+                        $is_summit = (stripos($row['route'], 'Uhuru') !== false || stripos($row['route'], 'Summit') !== false);
+                        $row_class = $is_summit ? ' class="summit-row"' : '';
+                        ?>
+                        <tr<?php echo $row_class; ?>>
+                          <td><?php echo esc_html($row['day']); ?></td>
+                          <td><?php echo wp_kses_post($row['route']); ?></td>
+                          <td><?php echo esc_html($row['elev']); ?></td>
+                          <td><?php echo esc_html($row['dist']); ?></td>
+                          <td><?php echo esc_html($row['time']); ?></td>
+                          <td><?php echo esc_html($row['zone']); ?></td>
+                        </tr>
+                        <?php
+                    }
+                } else {
+                    // Fallback
+                    ?>
+                    <tr>
+                      <td>Day 1</td>
+                      <td>Lemosho Glades → <strong>Mti Mkubwa Camp</strong></td>
+                      <td>2,100m → 2,895m</td>
+                      <td>6 km</td>
+                      <td>3–4 hrs</td>
+                      <td>Rainforest</td>
+                    </tr>
+                    <?php
+                }
+                ?>
+              </tbody>
+            </table>
             </div>
           </div>
         </section>
@@ -434,6 +498,194 @@ function ryder_kilimanjaro_shortcode( $atts ) {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DETAILED ITINERARY -->
+        <section class="section section--alt" id="itinerary">
+          <div class="container">
+            <div class="sec-header">
+              <span class="sec-header__eyebrow">Day-by-Day</span>
+              <h2 class="sec-header__title">The Complete Route Experience</h2>
+              <div class="divider"></div>
+              <p class="sec-header__lead">Every camp, every habitat, every defining moment — described in full so you know exactly what to expect.</p>
+            </div>
+
+            <div class="itin-days" style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+              <?php
+              $days = $get_field('ryder_days', array());
+              if ( !empty($days) && is_array($days) ) {
+                  foreach ( $days as $day ) {
+                      $is_summit = isset($day['is_summit']) && $day['is_summit'];
+                      $day_class = $is_summit ? ' itin-day--summit' : '';
+                      ?>
+                      <div class="itin-day<?php echo $day_class; ?>">
+                        <div class="itin-day__num">
+                          <span class="itin-day__label">Day</span>
+                          <span class="itin-day__n"><?php echo esc_html($day['day_num']); ?></span>
+                        </div>
+                        <div class="itin-day__content">
+                          <div class="itin-day__eyebrow"><?php echo esc_html($day['eyebrow']); ?></div>
+                          <h3 class="itin-day__title"><?php echo esc_html($day['title']); ?></h3>
+                          
+                          <?php if ( !empty($day['meta']) ) : ?>
+                          <div class="itin-meta">
+                            <?php
+                            $meta_lines = explode("\n", str_replace("\r", "", $day['meta']));
+                            foreach ( $meta_lines as $meta ) {
+                                if ( trim($meta) ) {
+                                    $meta_style = $is_summit ? ' style="background:#fff8e8;color:#7a4400;border-color:#D4B96A;"' : '';
+                                    echo '<span class="itin-meta__item"' . $meta_style . '>' . esc_html(trim($meta)) . '</span>';
+                                }
+                            }
+                            ?>
+                          </div>
+                          <?php endif; ?>
+
+                          <div class="itin-day__body">
+                            <?php echo wp_kses_post($day['body']); ?>
+                          </div>
+
+                          <?php if ( !empty($day['highlights']) ) : ?>
+                          <div class="itin-highlights">
+                            <?php
+                            $hl_lines = explode("\n", str_replace("\r", "", $day['highlights']));
+                            foreach ( $hl_lines as $hl ) {
+                                if ( trim($hl) ) {
+                                    echo '<span class="itin-hl">' . esc_html(trim($hl)) . '</span>';
+                                }
+                            }
+                            ?>
+                          </div>
+                          <?php endif; ?>
+
+                          <?php if ( !empty($day['accom']) ) : ?>
+                          <div class="itin-day__accom"><strong>Camp/Accommodation:</strong> <?php echo esc_html($day['accom']); ?></div>
+                          <?php endif; ?>
+                        </div>
+                      </div>
+                      <?php
+                  }
+              } else {
+                  echo '<p style="padding: 20px;">Itinerary details coming soon.</p>';
+              }
+              ?>
+            </div>
+          </div>
+        </section>
+
+        <!-- INCLUSIONS & EXCLUSIONS -->
+        <section class="section" id="inclusions">
+          <div class="container">
+            <div class="sec-header">
+              <span class="sec-header__eyebrow">What's Covered</span>
+              <h2 class="sec-header__title">Inclusions &amp; Exclusions</h2>
+              <div class="divider"></div>
+            </div>
+            <div class="inc-exc-grid">
+              <div class="inc-exc-col">
+                <h3 style="color:var(--green-inc);">✓ What's Included</h3>
+                <ul class="inc-list">
+                  <?php
+                  $inclusions = $get_field('ryder_inclusions', '');
+                  if ( $inclusions ) {
+                      $inc_lines = explode("\n", str_replace("\r", "", $inclusions));
+                      foreach ( $inc_lines as $line ) {
+                          $line = trim($line);
+                          if ( empty($line) ) continue;
+                          if ( strpos($line, '##') === 0 ) {
+                              echo '<li class="inc-cat" style="display:block;padding:12px 0 4px;">' . esc_html(trim(substr($line, 2))) . '</li>';
+                          } else {
+                              echo '<li><span class="inc-icon inc-icon--yes">✓</span>' . esc_html($line) . '</li>';
+                          }
+                      }
+                  } else {
+                      echo '<li><span class="inc-icon inc-icon--yes">✓</span>Professional Guides</li>';
+                      echo '<li><span class="inc-icon inc-icon--yes">✓</span>Park Fees</li>';
+                  }
+                  ?>
+                </ul>
+              </div>
+              <div class="inc-exc-col">
+                <h3 style="color:var(--red-exc);">✗ Not Included</h3>
+                <ul class="inc-list">
+                  <?php
+                  $exclusions = $get_field('ryder_exclusions', '');
+                  if ( $exclusions ) {
+                      $exc_lines = explode("\n", str_replace("\r", "", $exclusions));
+                      foreach ( $exc_lines as $line ) {
+                          $line = trim($line);
+                          if ( empty($line) ) continue;
+                          if ( strpos($line, '##') === 0 ) {
+                              echo '<li class="inc-cat" style="display:block;padding:12px 0 4px;">' . esc_html(trim(substr($line, 2))) . '</li>';
+                          } else {
+                              echo '<li><span class="inc-icon inc-icon--no">✗</span>' . esc_html($line) . '</li>';
+                          }
+                      }
+                  } else {
+                      echo '<li><span class="inc-icon inc-icon--no">✗</span>International Flights</li>';
+                      echo '<li><span class="inc-icon inc-icon--no">✗</span>Travel Insurance</li>';
+                  }
+                  ?>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SUPPLEMENTS -->
+        <section class="section section--alt" id="supplements">
+          <div class="container">
+            <div class="sec-header">
+              <span class="sec-header__eyebrow">Add-Ons</span>
+              <h2 class="sec-header__title">Supplements &amp; Optional Upgrades</h2>
+              <div class="divider"></div>
+              <p class="sec-header__lead">Enhance your expedition with additional services. All supplements can be arranged at booking.</p>
+            </div>
+            <div class="supps-grid">
+              <?php
+              $supplements = $get_field('ryder_supplements', array());
+              if ( !empty($supplements) && is_array($supplements) ) {
+                  foreach ( $supplements as $supp ) {
+                      ?>
+                      <div class="supp-card">
+                        <div class="supp-card__title"><?php echo esc_html($supp['icon'] . ' ' . $supp['name']); ?></div>
+                        <div class="supp-card__desc"><?php echo esc_html($supp['note']); ?></div>
+                        <div class="supp-card__price"><?php echo esc_html($supp['price']); ?></div>
+                      </div>
+                      <?php
+                  }
+              } else {
+                  echo '<p>No supplements listed.</p>';
+              }
+              ?>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section" id="faq">
+          <div class="container">
+            <div class="sec-header">
+              <span class="sec-header__eyebrow">Common Questions</span>
+              <h2 class="sec-header__title">Frequently Asked Questions</h2>
+              <div class="divider"></div>
+            </div>
+            <div class="faq-list">
+              <?php
+              $faqs = $get_field('ryder_faqs', array());
+              if ( !empty($faqs) && is_array($faqs) ) {
+                  foreach ( $faqs as $faq ) {
+                      ?>
+                      <div class="faq-item">
+                        <button class="faq-q"><?php echo esc_html($faq['question']); ?></button>
+                        <div class="faq-a"><?php echo wp_kses_post($faq['answer']); ?></div>
+                      </div>
+                      <?php
+                  }
+              }
+              ?>
             </div>
           </div>
         </section>
